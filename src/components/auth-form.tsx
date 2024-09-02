@@ -10,10 +10,10 @@ import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Icons } from "@/components/ui/icons";
-import { supabaseBrowser } from "@/lib/supabase/browser";
 // import { getBaseUrl } from "@/trpc/shared";
 import { toast } from "@/components/ui/use-toast";
-// import { userAuthSchema, type FormData } from "@/lib/validations/auth";
+import { createClient } from "@/lib/utils/supabase/client";
+import { userAuthSchema, type FormData } from "@/lib/validations/auth";
 
 type AuthFormProps = HTMLAttributes<HTMLDivElement>;
 
@@ -37,11 +37,12 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
 
   // TODO: fix issue with redirects
   const handleLoginWithOAuth = (provider: "google" | "github") => {
-    const supabase = supabaseBrowser();
+    const supabase = createClient();
     void supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: getBaseUrl() + "/auth/callback?next=" + next,
+        redirectTo: window.location.origin + "/auth/callback",
+        // redirectTo: getBaseUrl() + "/auth/callback?next=" + next,
       },
     });
   };
@@ -49,12 +50,12 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
   const onSubmit = async (formData: FormData) => {
     setIsLoading(true);
 
-    const supabase = supabaseBrowser();
+    const supabase = createClient();
     const { error } = await supabase.auth.signInWithOtp({
       email: formData.email.toLowerCase(),
       options: {
         // TODO: fix issue with redirects
-        emailRedirectTo: next ?? getBaseUrl(),
+        emailRedirectTo: next ?? window.location.origin,
       },
     });
 

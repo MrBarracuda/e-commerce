@@ -4,9 +4,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
-import { useCallback } from "react";
-import { createClient } from "@/lib/utils/supabase/client";
-// import { AuthForm } from "@/components/auth-form";
+import { AuthForm } from "@/components/auth-form";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -14,18 +12,6 @@ export const metadata: Metadata = {
 };
 
 export default function Auth() {
-  const handleLoginWithOAuth = (provider: "github" | "google") => {
-    const supabase = createClient();
-
-    void supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        // redirectTo: getBaseUrl() + "/auth/callback?next=" + next,
-        redirectTo: window.location.origin + "/auth/callback",
-      },
-    });
-  };
-
   return (
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
       <Link
@@ -45,7 +31,7 @@ export default function Auth() {
             Enter your email to join us or sign in
           </h1>
         </div>
-        {/*<AuthForm />*/}
+        <AuthForm />
         <p className="px-8 text-center text-sm text-muted-foreground">
           By continuing, I agree to{" "}
           <Link
