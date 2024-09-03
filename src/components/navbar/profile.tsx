@@ -18,6 +18,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/utils/supabase/client";
 import { useUser } from "@/hooks/use-user";
+import { Skeleton } from "@/components/ui/skeleton";
 // import { api } from "@/trpc/react";
 
 export function Profile() {
@@ -26,7 +27,7 @@ export function Profile() {
   const pathname = usePathname();
 
   // TODO: move this logic to auth-form, create a global store for user data object
-  const { data: user } = useUser();
+  const { data: user, isFetching } = useUser();
   //
   // const { data: user } = api.user.getCurrentUser.useQuery();
 
@@ -57,49 +58,63 @@ export function Profile() {
     });
   };
 
-  return !user?.id ? (
+  if (isFetching) {
+    return (
+      <Avatar>
+        <AvatarFallback>
+          <Skeleton className="h-full w-full rounded-full" />
+        </AvatarFallback>
+      </Avatar>
+    );
+  }
+
+  if (user?.id) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild aria-hidden>
+          <Button variant="ghost" size="icon" aria-label="profile dropdown">
+            <Avatar>
+              <AvatarImage src={user.avatar ?? ""} />
+              <AvatarFallback>{user.username?.slice(0, 1)}</AvatarFallback>
+            </Avatar>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>{user.username}</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => router.push("/profile")}>
+            {/*<Link*/}
+            {/*  href="/profile"*/}
+            {/*  aria-label="profile"*/}
+            {/*  className="appearance-none"*/}
+            {/*>*/}
+            Profile
+            {/*</Link>*/}
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push("/dashboard")}>
+            {/*<Link href="/dashboard">*/}
+            {/*TODO: Allow to navigate to dashboard if user has role of a seller */}
+            Seller Dashboard
+            {/*</Link>*/}
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="text-red-500 focus:text-red-600"
+            onClick={handleLogOut}
+          >
+            Log out
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+
+  return (
     <Link href="/auth">
       <Button variant="ghost" size="icon" aria-label="join us or login">
         {/*TODO: fix issue two focus elements exist instead of one */}
         <Icons.profile />
       </Button>
     </Link>
-  ) : (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild aria-hidden>
-        <Button variant="ghost" size="icon" aria-label="profile dropdown">
-          <Avatar>
-            <AvatarImage src={user.avatar ?? ""} />
-            <AvatarFallback>{user.username?.slice(0, 1)}</AvatarFallback>
-          </Avatar>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>{user.username}</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => router.push("/profile")}>
-          {/*<Link*/}
-          {/*  href="/profile"*/}
-          {/*  aria-label="profile"*/}
-          {/*  className="appearance-none"*/}
-          {/*>*/}
-          Profile
-          {/*</Link>*/}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => router.push("/dashboard")}>
-          {/*<Link href="/dashboard">*/}
-          {/*TODO: Allow to navigate to dashboard if user has role of a seller */}
-          Seller Dashboard
-          {/*</Link>*/}
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="text-red-500 focus:text-red-600"
-          onClick={handleLogOut}
-        >
-          Log out
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
   );
 }
