@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { AuthForm } from "@/components/auth-form";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -31,7 +32,9 @@ export default function Auth() {
             Enter your email to join us or sign in
           </h1>
         </div>
-        <AuthForm />
+        <Suspense fallback={<div>Loading...</div>}>
+          <AuthForm />
+        </Suspense>
         <p className="px-8 text-center text-sm text-muted-foreground">
           By continuing, I agree to{" "}
           <Link
