@@ -42,9 +42,18 @@ export async function updateSession(request: NextRequest) {
   //   return NextResponse.redirect(url);
   // }
 
-  if (data.session?.user && url.pathname.startsWith("/auth")) {
-    return NextResponse.redirect(new URL("/", request.url));
-    // return supabaseResponse;
+  if (data.session) {
+    if (url.pathname.startsWith("/auth")) {
+      return NextResponse.redirect(new URL("/", request.url));
+      // return supabaseResponse;
+    }
+  } else {
+    if (
+      url.pathname.startsWith("/dashboard") ||
+      url.pathname.startsWith("/profile")
+    ) {
+      return NextResponse.redirect(new URL("/auth", request.url));
+    }
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
