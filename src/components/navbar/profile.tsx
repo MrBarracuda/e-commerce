@@ -18,7 +18,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/utils/supabase/client";
 import { useUser } from "@/hooks/use-user";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PROTECTED_PATHS } from "@/lib/contants";
+import { PROTECTED_PATHS } from "@/lib/constant";
 // import { api } from "@/trpc/react";
 
 export function Profile() {
@@ -33,11 +33,8 @@ export function Profile() {
 
   const handleLogOut = async () => {
     const supabase = createClient();
-
     queryClient.clear();
-
     const { error } = await supabase.auth.signOut();
-
     router.refresh();
 
     if (PROTECTED_PATHS.includes(pathname)) {

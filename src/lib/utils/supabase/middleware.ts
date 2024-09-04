@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { PROTECTED_PATHS } from "@/lib/constant";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -48,11 +49,10 @@ export async function updateSession(request: NextRequest) {
       // return supabaseResponse;
     }
   } else {
-    if (
-      url.pathname.startsWith("/dashboard") ||
-      url.pathname.startsWith("/profile")
-    ) {
-      return NextResponse.redirect(new URL("/auth", request.url));
+    if (PROTECTED_PATHS.includes(url.pathname)) {
+      return NextResponse.redirect(
+        new URL("/auth?next=" + url.pathname, request.url),
+      );
     }
   }
 
