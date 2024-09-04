@@ -12,13 +12,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PROTECTED_PATH } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/utils/supabase/client";
 import { useUser } from "@/hooks/use-user";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PROTECTED_PATHS } from "@/lib/contants";
 // import { api } from "@/trpc/react";
 
 export function Profile() {
@@ -40,9 +40,9 @@ export function Profile() {
 
     router.refresh();
 
-    // if (PROTECTED_PATH.includes(pathname)) {
-    //   router.replace("/auth?next=" + pathname);
-    // }
+    if (PROTECTED_PATHS.includes(pathname)) {
+      router.replace("/auth?next=" + pathname);
+    }
 
     if (error) {
       return toast({
