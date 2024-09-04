@@ -41,7 +41,7 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
     void supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: window.location.origin + "/auth/callback",
+        redirectTo: window.location.origin + "/auth/callback?next=" + next,
         // redirectTo: getBaseUrl() + "/auth/callback?next=" + next,
       },
     });

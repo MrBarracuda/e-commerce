@@ -41,12 +41,13 @@ export const users = pgTable("users", {
   id: uuid("id").primaryKey(),
   avatar: varchar("avatar"),
   fullName: varchar("first_name"),
-  // lastName: varchar("last_name"),
   username: varchar("username").notNull(),
   email: varchar("email").notNull(),
   password: varchar("password"),
-  // dateOfBirth: date("date_of_birth"),
   phone: varchar("phone_number"),
+  dateOfBirth: timestamp("created_at", { withTimezone: true, mode: "string" })
+    .defaultNow()
+    .notNull(),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
     .defaultNow()
     .notNull(),
