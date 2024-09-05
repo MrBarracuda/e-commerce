@@ -2,16 +2,19 @@ import { Wrapper } from "@/components/wrapper";
 import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Checkout } from "@/app/subscription/checkout";
 
 const prices = [
   {
+    priceId: "price_1PvZNtJIRVMyG764rJoCdOve",
     title: "Premium",
     description:
       "Modi dolorem expedita deleniti. Corporis iste qui inventore pariatur adipisci vitae.",
-    benefits: ["faster delivery", "2% discount", "24 hours support"],
+    benefits: ["faster delivery", "24 hours support", "2% discount"],
     amount: 10,
   },
   {
+    priceId: "price_1PvYhwJIRVMyG764czSjV9Tx",
     title: "Premium Plus",
     description:
       "Explicabo quo fugit vel facere ullam corrupti non dolores. Expedita eius sit sequi.",
@@ -19,7 +22,7 @@ const prices = [
       "faster delivery",
       "24 hours support",
       "5% discount",
-      "exclusive drops",
+      // "exclusive drops",
     ],
     amount: 15,
   },
@@ -27,7 +30,7 @@ const prices = [
 
 export default function Price() {
   return (
-    <Wrapper className="max-w-screen-lg py-20">
+    <Wrapper className="max-w-screen-lg px-5 py-20">
       <div className="space-y-3 py-12 text-center">
         <h1 className="text-4xl font-bold">
           The right price for you, whoever you are
@@ -38,15 +41,15 @@ export default function Price() {
         </h2>
       </div>
 
-      <section className="grid grid-cols-2 gap-5">
+      <section className="grid grid-cols-1 gap-5 space-y-2 md:grid-cols-2 md:space-y-0">
         {prices.map((item, i) => (
           <div
             key={`${item.title}_${i}`}
             className={cn(
               "space-y-5 rounded-3xl border p-8 transition delay-100 ease-in-out hover:scale-105 hover:accent-primary hover:shadow-2xl",
-              {
-                "ring-2 ring-primary": i === 1,
-              },
+              // {
+              //   "ring-2 ring-primary": i === 1,
+              // },
             )}
           >
             {/**** TITLE, DESCRIPTION AND AMOUNT ****/}
@@ -69,9 +72,7 @@ export default function Price() {
                 </div>
               ))}
             </div>
-            <div className="flex">
-              <Button className="w-full">Getting started</Button>
-            </div>
+            <Checkout priceId={item.priceId} />
           </div>
         ))}
       </section>
