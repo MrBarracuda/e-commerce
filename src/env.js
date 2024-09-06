@@ -12,6 +12,8 @@ export const env = createEnv({
       .enum(["development", "test", "production"])
       .default("development"),
     STRIPE_SK: z.string(),
+    STRIPE_ENDPOINT_SECRET: z.string(),
+    SUPABASE_ADMIN: z.string(),
   },
 
   /**
@@ -37,6 +39,8 @@ export const env = createEnv({
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     STRIPE_SK: process.env.STRIPE_SK,
     NEXT_PUBLIC_STRIPE_PK: process.env.NEXT_PUBLIC_STRIPE_PK,
+    STRIPE_ENDPOINT_SECRET: process.env.STRIPE_ENDPOINT_SECRET,
+    SUPABASE_ADMIN: process.env.SUPABASE_ADMIN,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
