@@ -1,8 +1,7 @@
 import { Wrapper } from "@/components/wrapper";
 import { Icons } from "@/components/ui/icons";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Checkout } from "@/app/subscription/checkout";
+import { Checkout } from "@/app/profile/subscription/checkout";
 
 const prices = [
   {

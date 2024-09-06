@@ -1,6 +1,6 @@
 import { db } from "@/server/db";
 import { Hero } from "@/components/hero";
-import Price from "@/app/subscription/price";
+import Price from "@/app/profile/subscription/price";
 
 export default async function HomePage() {
   // const posts = await db.query.posts.findMany();

@@ -22,6 +22,7 @@ export const users = pgTable("users", {
   fullName: text("first_name"),
   username: text("username").notNull(),
   email: text("email").notNull().unique(),
+  // remove password column
   password: text("password"),
   phone: text("phone_number"),
   dateOfBirth: timestamp("created_at", { withTimezone: true, mode: "string" })

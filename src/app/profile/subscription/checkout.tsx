@@ -19,10 +19,10 @@ export function Checkout({ priceId }: { priceId: string }) {
     if (user?.id) {
       setIsLoading(true);
 
-      // TODO: Redirect a user on "success" page on subscrition
+      // TODO: Redirect a user to profile/subscription on successful subscribe
       const data = JSON.parse(
-        await checkout(user.email, priceId, "http://localhost:3000/"),
-      );
+        await checkout(user.email, priceId, window.location.origin + window.location.pathname),
+      ) as typeof user;
       // const data = JSON.parse(response);
       const stripe = await loadStripe(env.NEXT_PUBLIC_STRIPE_PK);
 
