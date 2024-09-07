@@ -11,6 +11,13 @@ const initUser = {
   phone: "",
   createdAt: "",
   date_of_birth: "",
+  subscription: {
+    email: "",
+    created_at: "",
+    expires_at: "",
+    customer_id: "",
+    subscription_id: "",
+  }
 };
 
 export function useUser() {
@@ -21,7 +28,7 @@ export function useUser() {
     if (data.session?.user) {
       const { data: user } = await supabase
         .from("users")
-        .select("*")
+        .select("*, subscription(*)")
         .eq("id", data.session.user.id)
         .single();
       return user;

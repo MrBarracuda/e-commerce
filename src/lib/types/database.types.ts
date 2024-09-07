@@ -9,26 +9,37 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      post: {
+      subscription: {
         Row: {
           created_at: string
-          id: number
-          name: string | null
-          updated_at: string | null
+          customer_id: string | null
+          email: string
+          expires_at: string | null
+          subscription_id: string | null
         }
         Insert: {
           created_at?: string
-          id?: number
-          name?: string | null
-          updated_at?: string | null
+          customer_id?: string | null
+          email: string
+          expires_at?: string | null
+          subscription_id?: string | null
         }
         Update: {
           created_at?: string
-          id?: number
-          name?: string | null
-          updated_at?: string | null
+          customer_id?: string | null
+          email?: string
+          expires_at?: string | null
+          subscription_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "subscription_email_users_email_fk"
+            columns: ["email"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["email"]
+          },
+        ]
       }
       users: {
         Row: {
