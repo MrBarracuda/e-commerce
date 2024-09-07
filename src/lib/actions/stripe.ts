@@ -27,8 +27,7 @@ export async function manageBilling(customer_id: string) {
     customer: customer_id,
     //TODO: change to env var
     return_url: "http://localhost:3000/",
-  })
+  });
 
   return JSON.stringify(response);
-
 }

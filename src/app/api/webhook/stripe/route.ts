@@ -39,7 +39,12 @@ export async function POST(req: Request) {
         const subscription_id = result.subscription as string;
         const email = result.customer_email!;
 
-        await onPaymentSucceeded(expires_at, customer_id, subscription_id, email);
+        await onPaymentSucceeded(
+          expires_at,
+          customer_id,
+          subscription_id,
+          email,
+        );
 
         break;
 
@@ -60,7 +65,12 @@ export async function POST(req: Request) {
   }
 }
 
-async function onPaymentSucceeded(expires_at: string, customer_id: string, subscription_id: string, email: string) {
+async function onPaymentSucceeded(
+  expires_at: string,
+  customer_id: string,
+  subscription_id: string,
+  email: string,
+) {
   const supabase = await supabaseAdmin();
   const { error } = await supabase
     .from("subscription")
