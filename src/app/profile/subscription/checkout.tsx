@@ -8,7 +8,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { env } from "@/env";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import {Icons} from "@/components/ui/icons";
+import { Icons } from "@/components/ui/icons";
 
 export function Checkout({ priceId }: { priceId: string }) {
   const { data: user } = useUser();
@@ -21,7 +21,11 @@ export function Checkout({ priceId }: { priceId: string }) {
 
       // TODO: Redirect a user to profile/subscription on successful subscribe
       const data = JSON.parse(
-        await checkout(user.email, priceId, window.location.origin + window.location.pathname),
+        await checkout(
+          user.email,
+          priceId,
+          window.location.origin + window.location.pathname,
+        ),
       ) as typeof user;
       // const data = JSON.parse(response);
       const stripe = await loadStripe(env.NEXT_PUBLIC_STRIPE_PK);
@@ -42,10 +46,16 @@ export function Checkout({ priceId }: { priceId: string }) {
 
   return (
     // <div className="flex">
-    <Button className={cn("w-full")} disabled={isLoading} onClick={handleSubscription}>
+    <Button
+      className={cn("w-full")}
+      disabled={isLoading}
+      onClick={handleSubscription}
+    >
       {isLoading ? (
         <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-      ) : "Getting Started"}
+      ) : (
+        "Getting Started"
+      )}
     </Button>
     // </div>
   );

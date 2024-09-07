@@ -16,20 +16,29 @@
 //   }
 // };
 
-import {Button} from "@/components/ui/button";
-import {manageBilling} from "@/lib/actions/stripe";
+import { Button } from "@/components/ui/button";
+import { manageBilling } from "@/lib/actions/stripe";
 
-export function SubscriptionInfo({user}: {user: any}) {
+export function SubscriptionInfo({ user }: { user: any }) {
   const handleBilling = async () => {
     if (user?.subscription?.customer_id) {
-      const data = JSON.parse(await manageBilling(user?.subscription?.customer_id));
+      const data = JSON.parse(
+        await manageBilling(user?.subscription?.customer_id),
+      );
       window.location.href = data?.url;
     }
-  }
+  };
 
-  return (<div className="space-y-5">
-    <h1>Hi, {user.username}</h1>
-    <p>Your subscription ends on {new Date(user.subscription.expires_at).toDateString()}</p>
-    {user.subscription.customer_id && <Button onClick={handleBilling}>Cancel</Button>}
-  </div>);
+  return (
+    <div className="space-y-5">
+      <h1>Hi, {user.username}</h1>
+      <p>
+        Your subscription ends on{" "}
+        {new Date(user.subscription.expires_at).toDateString()}
+      </p>
+      {user.subscription.customer_id && (
+        <Button onClick={handleBilling}>Cancel</Button>
+      )}
+    </div>
+  );
 }

@@ -17,7 +17,7 @@ const initUser = {
     expires_at: "",
     customer_id: "",
     subscription_id: "",
-  }
+  },
 };
 
 export function useUser() {
