@@ -16,9 +16,20 @@
 //   }
 // };
 
-export function SubscriptionInfo({user}: {user: any}) {
+import {Button} from "@/components/ui/button";
+import {manageBilling} from "@/lib/actions/stripe";
 
-  return (<div>
-    <h1>This is protected data</h1>
+export function SubscriptionInfo({user}: {user: any}) {
+  const handleBilling = async () => {
+    if (user?.subscription?.customer_id) {
+      const data = JSON.parse(await manageBilling(user?.subscription?.customer_id));
+      window.location.href = data?.url;
+    }
+  }
+
+  return (<div className="space-y-5">
+    <h1>Hi, {user.username}</h1>
+    <p>Your subscription ends on {new Date(user.subscription.expires_at).toDateString()}</p>
+    {user.subscription.customer_id && <Button onClick={handleBilling}>Cancel</Button>}
   </div>);
 }

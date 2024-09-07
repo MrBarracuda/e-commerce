@@ -3,7 +3,8 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 
 export default {
     darkMode: ["class"],
-    content: ["./src/**/*.tsx"],
+//TODO:	darkMode: 'selector' https://github.com/pacocoursey/next-themes/pull/290
+	content: ["./src/**/*.tsx"],
   theme: {
   	extend: {
   		fontFamily: {

@@ -3,10 +3,7 @@
 import {useUser} from "@/hooks/use-user";
 import Price from "@/app/profile/subscription/price";
 import {SubscriptionInfo } from "./subscriptionInfo";
-
-function checkIsSubscribed(dateString: string | null | undefined): boolean {
-  return !!dateString && new Date(dateString) > new Date();
-}
+import {isSubActive} from "@/lib/utils";
 
 export default function Subscription() {
   // (select auth.jwt()) ->> 'email' = email
@@ -16,7 +13,7 @@ export default function Subscription() {
     return <></>
   }
 
-  const isActive = checkIsSubscribed(user?.subscription?.expires_at)
+  const isActive = isSubActive(user?.subscription?.expires_at)
   return (
     <div>
       {/*<h1>This is subscription page</h1>*/}

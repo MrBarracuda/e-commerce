@@ -1,7 +1,10 @@
+"use client";
+
 import { Wrapper } from "@/components/wrapper";
 import { Icons } from "@/components/ui/icons";
-import { cn } from "@/lib/utils";
+import {cn, isSubActive} from "@/lib/utils";
 import { Checkout } from "@/app/profile/subscription/checkout";
+import {useUser} from "@/hooks/use-user";
 
 const prices = [
   {
@@ -28,6 +31,17 @@ const prices = [
 ];
 
 export default function Price() {
+  //TODO: get rid of useUser hook and remove "use client"
+  const {data: user, isLoading} = useUser();
+
+  if (isLoading) {
+    return false
+  }
+
+  if (user?.subscription?.subscription_id && isSubActive(user?.subscription?.expires_at)) {
+    return false;
+  }
+
   return (
     <Wrapper className="max-w-screen-lg px-5 py-20">
       <div className="space-y-3 py-12 text-center">

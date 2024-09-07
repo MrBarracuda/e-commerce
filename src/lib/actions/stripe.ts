@@ -21,3 +21,14 @@ export async function checkout(
 
   return JSON.stringify(response);
 }
+
+export async function manageBilling(customer_id: string) {
+  const response = await stripe.billingPortal.sessions.create({
+    customer: customer_id,
+    //TODO: change to env var
+    return_url: "http://localhost:3000/",
+  })
+
+  return JSON.stringify(response);
+
+}
