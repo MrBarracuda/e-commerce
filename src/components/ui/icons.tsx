@@ -6,7 +6,7 @@ import {
   X,
   Search,
   ArrowDownToLine,
-  CheckCircle,
+  Check,
   Leaf,
   User,
   type LucideIcon,
@@ -23,7 +23,7 @@ export const Icons = {
   chevronRight: ChevronRight,
   search: Search,
   arrowDownToLine: ArrowDownToLine,
-  checkCircle: CheckCircle,
+  check: Check,
   leaf: Leaf,
   profile: User,
   gitHub: ({ ...props }: LucideProps) => (

@@ -1,14 +1,12 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { sql } from "drizzle-orm";
 import {
-  index,
-  serial,
   timestamp,
-  varchar,
   uuid,
   pgTable,
+  text,
+  primaryKey,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -17,36 +15,43 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-// export const createTable = pgTableCreator((name) => `e-commerce_${name}`);
 
-export const posts = pgTable(
-  "post",
+export const users = pgTable(
+  "users",
   {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
+    id: uuid("id"),
+    avatar: text("avatar"),
+    fullName: text("first_name"),
+    username: text("username").notNull(),
+    email: text("email").notNull().unique(),
+    // remove password column
+    password: text("password"),
+    phone: text("phone_number"),
+    dateOfBirth: timestamp("created_at", { withTimezone: true, mode: "string" })
+      .defaultNow()
       .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date(),
-    ),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+      .defaultNow()
+      .notNull(),
   },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  }),
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.id, table.email] }),
+      // pkWithCustomName: primaryKey({ name: 'custom_name', columns: [table.bookId, table.authorId] }),
+    };
+  },
 );
 
-export const users = pgTable("users", {
-  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  id: uuid("id").primaryKey(),
-  avatar: varchar("avatar"),
-  fullName: varchar("first_name"),
-  // lastName: varchar("last_name"),
-  username: varchar("username").notNull(),
-  email: varchar("email").notNull(),
-  password: varchar("password"),
-  // dateOfBirth: date("date_of_birth"),
-  phone: varchar("phone_number"),
+export const subscription = pgTable("subscription", {
+  email: text("email")
+    .primaryKey()
+    .references(() => users.email, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+  subscription_id: text("subscription_id"),
+  customer_id: text("customer_id"),
+  expires_at: timestamp("expires_at", { withTimezone: true, mode: "string" }),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
     .defaultNow()
     .notNull(),

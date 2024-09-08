@@ -5,6 +5,7 @@ import { type Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { QueryProvider } from "@/components/query-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { Navbar } from "@/components/navbar";
 
 export const metadata: Metadata = {
   title: "E-Commerce",
@@ -16,7 +17,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
+    <html
+      lang="en"
+      className={`${GeistSans.variable}`}
+      suppressHydrationWarning
+    >
       <body>
         <QueryProvider>
           <ThemeProvider
@@ -25,6 +30,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <Navbar />
             <main className="relative flex min-h-screen flex-col">
               <div className="flex-1 flex-grow">{children}</div>
             </main>
