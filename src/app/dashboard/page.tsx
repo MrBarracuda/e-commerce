@@ -6,7 +6,7 @@ import { Wrapper } from "@/components/wrapper";
 export default function Dashboard() {
   return (
     <>
-      <Wrapper className="py-20">
+      <Wrapper className="py-16">
         <div className="grid-2 grid">
           <h1 className="text-3xl">Dashboard</h1>
           <Link

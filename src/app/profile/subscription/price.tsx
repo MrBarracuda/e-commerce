@@ -29,7 +29,7 @@ const prices = [
     amount: 15,
   },
 ];
-
+//TODO: move this component to components folder
 export default function Price() {
   //TODO: get rid of useUser hook and remove "use client"
   const { data: user, isLoading } = useUser();
@@ -46,8 +46,8 @@ export default function Price() {
   }
 
   return (
-    <Wrapper className="max-w-screen-lg px-5 py-20">
-      <div className="space-y-3 py-12 text-center">
+    <Wrapper className="max-w-screen-lg px-5 py-16 space-y-12">
+      <div className="space-y-3 text-center">
         <h1 className="text-4xl font-bold">
           The right price for you, whoever you are
         </h1>
