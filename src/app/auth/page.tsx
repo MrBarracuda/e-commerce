@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function Auth() {
   return (
-    <div className="container flex h-screen w-screen flex-col items-center justify-center">
+    <div className="flex h-screen w-screen flex-col items-center justify-center">
       <Link
         href="/"
         className={cn(
