@@ -7,7 +7,8 @@ export function Hero() {
     <Wrapper>
       <section className="mx-auto flex max-w-4xl flex-col items-center py-16 text-center">
         <h1 className="-m-1 text-5xl font-semibold md:text-6xl">
-          Discover exclusive sneakers with no boundaries</h1>
+          Discover exclusive sneakers with no boundaries
+        </h1>
         <p className="mt-6 max-w-prose text-lg text-muted-foreground">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
           culpa dolorum est laboriosam numquam similique!
@@ -16,7 +17,9 @@ export function Hero() {
           <Link href="/products" className={buttonVariants()}>
             Browse Trending
           </Link>
-          <button className={buttonVariants({variant: "ghost"})}>Contact Us &rarr;</button>
+          <button className={buttonVariants({ variant: "ghost" })}>
+            Contact Us &rarr;
+          </button>
         </div>
       </section>
     </Wrapper>

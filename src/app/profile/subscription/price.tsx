@@ -46,7 +46,7 @@ export default function Price() {
   }
 
   return (
-    <Wrapper className="max-w-screen-lg px-5 py-16 space-y-12">
+    <Wrapper className="max-w-screen-lg space-y-12 px-5 py-16">
       <div className="space-y-3 text-center">
         <h1 className="text-4xl font-bold">
           The right price for you, whoever you are

@@ -4,20 +4,23 @@ import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { type HTMLAttributes, useState } from "react";
-
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Icons } from "@/components/ui/icons";
-// import { getBaseUrl } from "@/trpc/shared";
-import { toast } from "@/components/ui/use-toast";
 import { createClient } from "@/lib/utils/supabase/client";
 import { userAuthSchema, type FormData } from "@/lib/validations/auth";
+import { useToast } from "@/hooks/use-toast";
 
 type AuthFormProps = HTMLAttributes<HTMLDivElement>;
 
 export function AuthForm({ className, ...props }: AuthFormProps) {
+  const { toast } = useToast();
+  const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isGitHubLoading, setIsGitHubLoading] = useState<boolean>(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -26,12 +29,6 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
   } = useForm<FormData>({
     resolver: zodResolver(userAuthSchema),
   });
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isGitHubLoading, setIsGitHubLoading] = useState<boolean>(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
-
-  const searchParams = useSearchParams();
 
   const next = searchParams.get("next") ?? "";
 
