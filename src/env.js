@@ -14,8 +14,6 @@ export const env = createEnv({
     STRIPE_SK: z.string().min(1),
     STRIPE_ENDPOINT_SECRET: z.string().min(1),
     SUPABASE_ADMIN: z.string().min(1),
-    STRIPE_PREMIUM_MONTHLY_PLAN_ID: z.string().min(1),
-    STRIPE_PREMIUM_PLUS_MONTHLY_PLAN_ID: z.string().min(1),
     STRIPE_PRO_MONTHLY_PLAN_ID: z.string().min(1),
   },
 
@@ -45,9 +43,6 @@ export const env = createEnv({
     STRIPE_ENDPOINT_SECRET: process.env.STRIPE_ENDPOINT_SECRET,
     SUPABASE_ADMIN: process.env.SUPABASE_ADMIN,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-    STRIPE_PREMIUM_MONTHLY_PLAN_ID: process.env.STRIPE_PREMIUM_MONTHLY_PLAN_ID,
-    STRIPE_PREMIUM_PLUS_MONTHLY_PLAN_ID:
-      process.env.STRIPE_PREMIUM_PLUS_MONTHLY_PLAN_ID,
     STRIPE_PRO_MONTHLY_PLAN_ID: process.env.STRIPE_PRO_MONTHLY_PLAN_ID,
   },
   /**
