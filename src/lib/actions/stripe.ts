@@ -22,11 +22,11 @@ export async function checkout(
   return JSON.stringify(response);
 }
 
-export async function manageBilling(customer_id: string) {
-  const response = await stripe.billingPortal.sessions.create({
-    customer: customer_id,
-    return_url: env.NEXT_PUBLIC_APP_URL,
-  });
-
-  return JSON.stringify(response);
-}
+// export async function manageBilling(customer_id: string) {
+//   const response = await stripe.billingPortal.sessions.create({
+//     customer: customer_id,
+//     return_url: env.NEXT_PUBLIC_APP_URL,
+//   });
+//
+//   return JSON.stringify(response);
+// }
