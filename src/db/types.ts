@@ -15,6 +15,7 @@ export type Database = {
           customer_id: string | null;
           email: string;
           expires_at: string | null;
+          price_id: string | null;
           subscription_id: string | null;
         };
         Insert: {
@@ -22,6 +23,7 @@ export type Database = {
           customer_id?: string | null;
           email: string;
           expires_at?: string | null;
+          price_id?: string | null;
           subscription_id?: string | null;
         };
         Update: {
@@ -29,6 +31,7 @@ export type Database = {
           customer_id?: string | null;
           email?: string;
           expires_at?: string | null;
+          price_id?: string | null;
           subscription_id?: string | null;
         };
         Relationships: [
@@ -48,7 +51,6 @@ export type Database = {
           email: string;
           first_name: string | null;
           id: string;
-          password: string | null;
           phone_number: string | null;
           username: string;
         };
@@ -58,7 +60,6 @@ export type Database = {
           email: string;
           first_name?: string | null;
           id: string;
-          password?: string | null;
           phone_number?: string | null;
           username: string;
         };
@@ -68,7 +69,6 @@ export type Database = {
           email?: string;
           first_name?: string | null;
           id?: string;
-          password?: string | null;
           phone_number?: string | null;
           username?: string;
         };
@@ -79,7 +79,10 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      is_subscription_active: {
+        Args: Record<PropertyKey, never>;
+        Returns: boolean;
+      };
     };
     Enums: {
       [_ in never]: never;

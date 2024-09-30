@@ -1,4 +1,3 @@
-// Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import {
@@ -9,13 +8,6 @@ import {
   primaryKey,
 } from "drizzle-orm/pg-core";
 
-/**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
- */
-
 export const users = pgTable(
   "users",
   {
@@ -25,7 +17,6 @@ export const users = pgTable(
     username: text("username").notNull(),
     email: text("email").notNull().unique(),
     // remove password column
-    password: text("password"),
     phone: text("phone_number"),
     dateOfBirth: timestamp("created_at", { withTimezone: true, mode: "string" })
       .defaultNow()
@@ -37,11 +28,11 @@ export const users = pgTable(
   (table) => {
     return {
       pk: primaryKey({ columns: [table.id, table.email] }),
-      // pkWithCustomName: primaryKey({ name: 'custom_name', columns: [table.bookId, table.authorId] }),
     };
   },
 );
 
+//TODO: change columns to camelCase
 export const subscription = pgTable("subscription", {
   email: text("email")
     .primaryKey()
@@ -49,9 +40,10 @@ export const subscription = pgTable("subscription", {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
-  subscription_id: text("subscription_id"),
-  customer_id: text("customer_id"),
-  expires_at: timestamp("expires_at", { withTimezone: true, mode: "string" }),
+  subscriptionId: text("subscription_id"),
+  customerId: text("customer_id"),
+  priceId: text("price_id"),
+  expiresAt: timestamp("expires_at", { withTimezone: true, mode: "string" }),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
     .defaultNow()
     .notNull(),

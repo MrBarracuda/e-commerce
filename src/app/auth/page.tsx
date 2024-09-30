@@ -3,9 +3,9 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { Icons } from "@/components/ui/icons";
-import { AuthForm } from "@/components/auth-form";
+import { Icons } from "@/components/icons";
 import { Suspense } from "react";
+import AuthForm from "@/app/auth/auth-form";
 
 export const metadata: Metadata = {
   title: "Authentication",

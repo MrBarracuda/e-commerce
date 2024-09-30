@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/ui/icons";
+import { Icons } from "@/components/icons";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,10 +15,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "@/components/ui/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
-import { createClient } from "@/lib/utils/supabase/client";
+import { supabaseClient } from "@/lib/supabase/client";
 import { useUser } from "@/hooks/use-user";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PROTECTED_PATHS } from "@/lib/constant";
+import { protectedPaths } from "@/config/protected-paths";
+import { type Route } from "next";
 // import { api } from "@/trpc/react";
 
 export function Profile() {
@@ -32,13 +33,13 @@ export function Profile() {
   // const { data: user } = api.user.getCurrentUser.useQuery();
 
   const handleLogOut = async () => {
-    const supabase = createClient();
+    const supabase = supabaseClient();
     queryClient.clear();
     const { error } = await supabase.auth.signOut();
     router.refresh();
 
-    if (PROTECTED_PATHS.includes(pathname)) {
-      router.replace("/auth?next=" + pathname);
+    if (protectedPaths.includes(pathname)) {
+      router.replace(("/auth?next=" + pathname) as Route);
     }
 
     if (error) {
@@ -91,7 +92,7 @@ export function Profile() {
           <DropdownMenuItem onClick={() => router.push("/dashboard")}>
             {/*<Link href="/dashboard">*/}
             {/*TODO: Allow to navigate to dashboard if user has role of a seller */}
-            Seller Dashboard
+            Dashboard
             {/*</Link>*/}
           </DropdownMenuItem>
           <DropdownMenuSeparator />

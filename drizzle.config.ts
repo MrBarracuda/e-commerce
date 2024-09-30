@@ -1,12 +1,12 @@
-import { type Config } from "drizzle-kit";
-
+import { defineConfig } from "drizzle-kit";
 import { env } from "@/env";
 
-export default {
-  schema: "./src/server/db/schema.ts",
+export default defineConfig({
+  schema: "./src/db/schema.ts",
+  out: "./drizzle",
   dialect: "postgresql",
   dbCredentials: {
     url: env.POSTGRES_URL,
   },
   tablesFilter: ["e-commerce_*"],
-} satisfies Config;
+})

@@ -15,6 +15,9 @@
     "utils": "@/lib/utils",
     "ui": "@/components/ui",
     "lib": "@/lib",
-    "hooks": "@/hooks"
+    "hooks": "@/hooks",
+    "db": "@/db",
+    "types": "@/types",
+    "config": "@/config"
   }
 }
