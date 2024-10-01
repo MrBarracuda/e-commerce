@@ -8,46 +8,38 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Icons } from "@/components/ui/icons";
-import { createClient } from "@/lib/utils/supabase/client";
-import { userAuthSchema, type FormData } from "@/lib/validations/auth";
+import { Icons } from "@/components/icons";
+import { supabaseClient } from "@/lib/supabase/client";
+import { type FormData } from "@/lib/validations/auth";
 import { useToast } from "@/hooks/use-toast";
+import { z } from "zod";
+import LoginOauth from "@/app/auth/login-oauth";
 
 type AuthFormProps = HTMLAttributes<HTMLDivElement>;
+
+const schema = z.object({
+  email: z.string().email(),
+});
 
 export function AuthForm({ className, ...props }: AuthFormProps) {
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isGitHubLoading, setIsGitHubLoading] = useState<boolean>(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm<FormData>({
-    resolver: zodResolver(userAuthSchema),
+    resolver: zodResolver(schema),
   });
 
   const next = searchParams.get("next") ?? "";
 
-  // TODO: fix issue with redirects
-  const handleLoginWithOAuth = (provider: "google" | "github") => {
-    const supabase = createClient();
-    void supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: window.location.origin + "/auth/callback?next=" + next,
-        // redirectTo: getBaseUrl() + "/auth/callback?next=" + next,
-      },
-    });
-  };
-
   const onSubmit = async (formData: FormData) => {
     setIsLoading(true);
 
-    const supabase = createClient();
+    const supabase = supabaseClient();
     const { error } = await supabase.auth.signInWithOtp({
       email: formData.email.toLowerCase(),
       options: {
@@ -89,7 +81,7 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading || isGitHubLoading || isGoogleLoading}
+              disabled={isLoading}
               {...register("email")}
             />
             {errors?.email && (
@@ -116,39 +108,8 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
           </span>
         </div>
       </div>
-      <button
-        type="button"
-        className={cn(buttonVariants({ variant: "outline" }))}
-        onClick={() => {
-          setIsGitHubLoading(true);
-          handleLoginWithOAuth("github");
-        }}
-        disabled={isLoading || isGitHubLoading}
-      >
-        {isGitHubLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}
-        Github
-      </button>
 
-      <button
-        type="button"
-        className={cn(buttonVariants({ variant: "outline" }))}
-        onClick={() => {
-          setIsGoogleLoading(true);
-          handleLoginWithOAuth("google");
-        }}
-        disabled={isLoading || isGoogleLoading}
-      >
-        {isGoogleLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.google className="mr-2 h-4 w-4" />
-        )}
-        Google
-      </button>
+      <LoginOauth />
     </div>
   );
 }

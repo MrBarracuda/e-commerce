@@ -1,9 +1,13 @@
 import { createClient } from "@supabase/supabase-js";
 import { env } from "@/env";
-import { type Database } from "@/lib/types/database.types";
+import { type Database } from "@/db/types";
 
 export async function supabaseAdmin() {
-  const supabase = createClient<Database>(
+  /**
+   * Access auth admin api
+   * const adminAuthClient = supabase.auth.admin
+   */
+  return createClient<Database>(
     env.NEXT_PUBLIC_SUPABASE_URL,
     env.SUPABASE_ADMIN,
     {
@@ -13,9 +17,4 @@ export async function supabaseAdmin() {
       },
     },
   );
-
-  // Access auth admin api
-  //   const adminAuthClient = supabase.auth.admin
-
-  return supabase;
 }

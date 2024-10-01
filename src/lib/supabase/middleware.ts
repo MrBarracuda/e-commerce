@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { PROTECTED_PATHS } from "@/lib/constant";
+import { protectedPaths } from "@/config/protected-paths";
+import { env } from "@/env";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -8,8 +9,8 @@ export async function updateSession(request: NextRequest) {
   });
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {
@@ -49,7 +50,7 @@ export async function updateSession(request: NextRequest) {
       // return supabaseResponse;
     }
   } else {
-    if (PROTECTED_PATHS.includes(url.pathname)) {
+    if (protectedPaths.includes(url.pathname)) {
       return NextResponse.redirect(
         new URL("/auth?next=" + url.pathname, request.url),
       );

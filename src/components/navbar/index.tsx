@@ -1,4 +1,4 @@
-import { NavItems } from "@/components/navbar/nav-items";
+// import { NavItems } from "@/components/navbar/nav-items";
 import { ModeToggle } from "@/components/navbar/mode-toggle";
 
 // import { CartSheet } from "@/components/navbar/cart-sheet";

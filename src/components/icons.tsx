@@ -11,6 +11,8 @@ import {
   User,
   Swords,
   Package,
+  Moon,
+  Sun,
   type LucideIcon,
   type LucideProps,
 } from "lucide-react";
@@ -30,6 +32,8 @@ export const Icons = {
   profile: User,
   swords: Swords,
   package: Package,
+  moon: Moon,
+  sun: Sun,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

@@ -8,7 +8,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { env } from "@/env";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Icons } from "@/components/ui/icons";
+import { Icons } from "@/components/icons";
 
 export function Checkout({ priceId }: { priceId: string }) {
   const { data: user } = useUser();

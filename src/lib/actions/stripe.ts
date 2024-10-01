@@ -11,9 +11,9 @@ export async function checkout(
   redirectTo: string,
 ) {
   const response = await stripe.checkout.sessions.create({
-    // TODO: change default url to env variable
-    success_url: redirectTo || "http://localhost:3000/",
-    cancel_url: "http://localhost:3000/",
+    // TODO: redirect to congratulations page on success
+    success_url: redirectTo || env.NEXT_PUBLIC_APP_URL,
+    cancel_url: env.NEXT_PUBLIC_APP_URL,
     customer_email: email,
     line_items: [{ price: priceId, quantity: 1 }],
     mode: "subscription",
@@ -22,12 +22,11 @@ export async function checkout(
   return JSON.stringify(response);
 }
 
-export async function manageBilling(customer_id: string) {
-  const response = await stripe.billingPortal.sessions.create({
-    customer: customer_id,
-    //TODO: change to env var
-    return_url: "http://localhost:3000/",
-  });
-
-  return JSON.stringify(response);
-}
+// export async function manageBilling(customer_id: string) {
+//   const response = await stripe.billingPortal.sessions.create({
+//     customer: customer_id,
+//     return_url: env.NEXT_PUBLIC_APP_URL,
+//   });
+//
+//   return JSON.stringify(response);
+// }
