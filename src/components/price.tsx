@@ -2,12 +2,16 @@ import { SubscriptionSection } from "@/app/profile/subscription/subscription-sec
 import { getCurrentUser } from "@/lib/user";
 import { getUserSubscriptionPlan } from "@/lib/subscription";
 
-//TODO: move this component to components folder
 export async function Price() {
   const user = await getCurrentUser();
-  const subscriptionPlan = await getUserSubscriptionPlan(user?.email ?? "");
 
-  if (!subscriptionPlan.isPro) {
+  if (!user?.email) {
+    return false;
+  }
+
+  const subscriptionPlan = await getUserSubscriptionPlan(user.email);
+
+  if (subscriptionPlan.isPro) {
     return false;
   }
 
