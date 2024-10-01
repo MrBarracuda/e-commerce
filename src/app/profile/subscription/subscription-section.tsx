@@ -1,4 +1,9 @@
+"use client";
+
 import { Icons } from "@/components/icons";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import Link from "next/link";
 
 export function SubscriptionSection() {
   return (
@@ -45,11 +50,12 @@ export function SubscriptionSection() {
               Billed Monthly
             </p>
           </div>
-          {/*<Link href="/login" className={cn(buttonVariants({ size: "lg" }))}>*/}
-          {/*  Get Started*/}
-          {/*</Link>*/}
-          {/*<Checkout priceId={priceId} />*/}
-          {/*TODO: Navigate to /dashboard/billing on button click*/}
+          <Link
+            href="/dashboard/billing"
+            className={cn(buttonVariants({ size: "lg" }))}
+          >
+            Get Started
+          </Link>
         </div>
       </div>
       <div className="mx-auto flex w-full max-w-[58rem] flex-col gap-4">
