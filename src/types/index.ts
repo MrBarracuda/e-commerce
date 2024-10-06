@@ -1,5 +1,5 @@
 import { type Icon, type Icons } from "@/components/icons";
-import { type subscription } from "@/db/schema";
+import { type productTable, type subscriptionTable } from "@/db/schema";
 import { type InferSelectModel } from "drizzle-orm";
 
 export type NavItem = {
@@ -41,9 +41,9 @@ export type SiteConfig = {
 //   sidebarNav: SidebarNavItem[]
 // }
 //
-// export type MarketingConfig = {
-//   mainNav: MainNavItem[]
-// }
+export type NavigationConfig = {
+  mainNav: MainNavItem[];
+};
 
 export type DashboardConfig = {
   mainNav: MainNavItem[];
@@ -58,7 +58,8 @@ export type SubscriptionPlan = {
   amount: number;
 };
 
-export type Subscription = InferSelectModel<typeof subscription>;
+export type Subscription = InferSelectModel<typeof subscriptionTable>;
+export type Product = InferSelectModel<typeof productTable>;
 
 // export type UserSubscriptionPlan = SubscriptionPlan &
 //   Pick<Subscription, "customerId" | "subscriptionId" | "expiresAt"> & {

@@ -3,6 +3,7 @@ import { stripe } from "@/lib/stripe";
 import { getUserSubscriptionPlan } from "@/lib/subscription";
 import { BillingForm } from "@/components/billing-form";
 import { getCurrentUser } from "@/lib/user";
+import { Wrapper } from "@/components/wrapper";
 
 export const metadata = {
   title: "Billing",
@@ -28,13 +29,13 @@ export default async function BillingPage() {
   }
 
   return (
-    <div className="grid gap-8">
+    <Wrapper className="py-14">
       <BillingForm
         subscriptionPlan={{
           ...subscriptionPlan,
           isCanceled,
         }}
       />
-    </div>
+    </Wrapper>
   );
 }

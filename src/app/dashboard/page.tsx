@@ -13,13 +13,7 @@ export default function Dashboard() {
             href="/dashboard/create"
             className={cn(buttonVariants({ variant: "link" }), "text-lg")}
           >
-            Create
-          </Link>
-          <Link
-            href="/dashboard/billing"
-            className={cn(buttonVariants({ variant: "link" }), "text-lg")}
-          >
-            Billing
+            Create Product
           </Link>
         </div>
       </Wrapper>

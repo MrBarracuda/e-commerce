@@ -1,3 +1,3 @@
 import { type ProtectedPaths } from "@/types";
 
-export const protectedPaths: ProtectedPaths = ["/dashboard", "/profile"];
+export const protectedPaths: ProtectedPaths = ["/dashboard", "/settings"];

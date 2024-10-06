@@ -1,7 +1,7 @@
 import { type SiteConfig } from "@/types";
 
 export const siteConfig: SiteConfig = {
-  name: "E-Commerce",
+  name: "LuxeScents",
   description:
     "An open source application built using the new router, server components and everything new in Next.js 14.",
   url: "http://localhost:3000",
