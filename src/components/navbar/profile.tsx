@@ -12,7 +12,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { toast } from "@/components/ui/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 import { supabaseClient } from "@/lib/supabase/client";
@@ -20,17 +19,16 @@ import { useUser } from "@/hooks/use-user";
 import { Skeleton } from "@/components/ui/skeleton";
 import { protectedPaths } from "@/config/protected-paths";
 import { type Route } from "next";
-// import { api } from "@/trpc/react";
+import { useToast } from "@/hooks/use-toast";
 
 export function Profile() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const pathname = usePathname();
+  const { toast } = useToast();
 
   // TODO: move this logic to auth-form, create a global store for user data object
   const { data: user, isFetching } = useUser();
-  //
-  // const { data: user } = api.user.getCurrentUser.useQuery();
 
   const handleLogOut = async () => {
     const supabase = supabaseClient();
@@ -80,20 +78,24 @@ export function Profile() {
         <DropdownMenuContent>
           <DropdownMenuLabel>{user.username}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => router.push("/profile")}>
-            {/*<Link*/}
-            {/*  href="/profile"*/}
-            {/*  aria-label="profile"*/}
-            {/*  className="appearance-none"*/}
-            {/*>*/}
-            Profile
-            {/*</Link>*/}
+          <DropdownMenuItem asChild>
+            <Link
+              href="/settings"
+              aria-label="settings"
+              className="appearance-none"
+            >
+              Settings
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push("/dashboard")}>
-            {/*<Link href="/dashboard">*/}
-            {/*TODO: Allow to navigate to dashboard if user has role of a seller */}
-            Dashboard
-            {/*</Link>*/}
+          <DropdownMenuItem asChild>
+            <Link
+              href="/dashboard"
+              aria-label="dashboard"
+              className="appearance-none"
+            >
+              {/*TODO: Allow to navigate to dashboard if user has role of a seller */}
+              Dashboard
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

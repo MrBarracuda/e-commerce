@@ -1,4 +1,4 @@
-import { SubscriptionSection } from "@/app/profile/subscription/subscription-section";
+import { SubscriptionSection } from "@/app/settings/billing/subscription-section";
 import { getCurrentUser } from "@/lib/user";
 import { getUserSubscriptionPlan } from "@/lib/subscription";
 

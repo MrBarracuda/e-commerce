@@ -51,7 +51,7 @@ export function SubscriptionSection() {
             </p>
           </div>
           <Link
-            href="/dashboard/billing"
+            href="/settings/billing"
             className={cn(buttonVariants({ size: "lg" }))}
           >
             Get Started

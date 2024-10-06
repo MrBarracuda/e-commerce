@@ -2,11 +2,8 @@ import { type UserSubscriptionPlan } from "@/types";
 import { db } from "@/db";
 import { isSubActive } from "@/lib/utils";
 import { eq } from "drizzle-orm";
-import {
-  subscription as subscriptionTable,
-  users as userTable,
-} from "@/db/schema";
 import { freePlan, proPlan } from "@/config/subscription-plans";
+import { subscriptionTable } from "@/db/schema";
 
 export async function getUserSubscriptionPlan(
   userEmail: string,
@@ -17,10 +14,11 @@ export async function getUserSubscriptionPlan(
       customerId: subscriptionTable.customerId,
       priceId: subscriptionTable.priceId,
       expiresAt: subscriptionTable.expiresAt,
-      email: userTable.email,
+      // email: userTable.email,
+      email: subscriptionTable.email,
     })
     .from(subscriptionTable)
-    .leftJoin(userTable, eq(subscriptionTable.email, userTable.email))
+    // .leftJoin(userTable, eq(subscriptionTable.email, userTable.email))
     .where(eq(subscriptionTable.email, userEmail))
     .limit(1)
     .execute()

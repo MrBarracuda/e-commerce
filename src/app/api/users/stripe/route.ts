@@ -6,7 +6,7 @@ import { absoluteUrl } from "@/lib/utils";
 import { proPlan } from "@/config/subscription-plans";
 import { getCurrentUser } from "@/lib/user";
 
-const billingUrl = absoluteUrl("/dashboard/billing");
+const billingUrl = absoluteUrl("/settings/billing");
 
 export async function GET(req: Request) {
   try {

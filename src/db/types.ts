@@ -9,6 +9,144 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      address: {
+        Row: {
+          city: string | null;
+          country: string | null;
+          created_at: string;
+          id: string;
+          name: string | null;
+          phone_number: string | null;
+          postal_code: string | null;
+          street: string | null;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          city?: string | null;
+          country?: string | null;
+          created_at?: string;
+          id?: string;
+          name?: string | null;
+          phone_number?: string | null;
+          postal_code?: string | null;
+          street?: string | null;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          city?: string | null;
+          country?: string | null;
+          created_at?: string;
+          id?: string;
+          name?: string | null;
+          phone_number?: string | null;
+          postal_code?: string | null;
+          street?: string | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "address_user_id_user_id_fk";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      order: {
+        Row: {
+          address_id: string | null;
+          amount: number | null;
+          created_at: string;
+          id: string;
+          is_paid: boolean | null;
+          product_id: string | null;
+          status: Database["public"]["Enums"]["status"] | null;
+          updated_at: string;
+          user_id: string | null;
+        };
+        Insert: {
+          address_id?: string | null;
+          amount?: number | null;
+          created_at?: string;
+          id?: string;
+          is_paid?: boolean | null;
+          product_id?: string | null;
+          status?: Database["public"]["Enums"]["status"] | null;
+          updated_at?: string;
+          user_id?: string | null;
+        };
+        Update: {
+          address_id?: string | null;
+          amount?: number | null;
+          created_at?: string;
+          id?: string;
+          is_paid?: boolean | null;
+          product_id?: string | null;
+          status?: Database["public"]["Enums"]["status"] | null;
+          updated_at?: string;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "order_address_id_address_id_fk";
+            columns: ["address_id"];
+            isOneToOne: false;
+            referencedRelation: "address";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "order_product_id_product_id_fk";
+            columns: ["product_id"];
+            isOneToOne: false;
+            referencedRelation: "product";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "order_user_id_user_id_fk";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      product: {
+        Row: {
+          created_at: string;
+          description: string | null;
+          id: string;
+          image: string | null;
+          name: string | null;
+          price: string | null;
+          size: Database["public"]["Enums"]["size"] | null;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          image?: string | null;
+          name?: string | null;
+          price?: string | null;
+          size?: Database["public"]["Enums"]["size"] | null;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          image?: string | null;
+          name?: string | null;
+          price?: string | null;
+          size?: Database["public"]["Enums"]["size"] | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       subscription: {
         Row: {
           created_at: string;
@@ -36,20 +174,20 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: "subscription_email_users_email_fk";
+            foreignKeyName: "subscription_email_user_email_fk";
             columns: ["email"];
             isOneToOne: true;
-            referencedRelation: "users";
+            referencedRelation: "user";
             referencedColumns: ["email"];
           },
         ];
       };
-      users: {
+      user: {
         Row: {
           avatar: string | null;
           created_at: string;
           email: string;
-          first_name: string | null;
+          full_name: string | null;
           id: string;
           phone_number: string | null;
           username: string;
@@ -58,8 +196,8 @@ export type Database = {
           avatar?: string | null;
           created_at?: string;
           email: string;
-          first_name?: string | null;
-          id: string;
+          full_name?: string | null;
+          id?: string;
           phone_number?: string | null;
           username: string;
         };
@@ -67,7 +205,7 @@ export type Database = {
           avatar?: string | null;
           created_at?: string;
           email?: string;
-          first_name?: string | null;
+          full_name?: string | null;
           id?: string;
           phone_number?: string | null;
           username?: string;
@@ -85,7 +223,18 @@ export type Database = {
       };
     };
     Enums: {
-      [_ in never]: never;
+      size:
+        | "5"
+        | "10"
+        | "15"
+        | "30"
+        | "50"
+        | "75"
+        | "100"
+        | "125"
+        | "150"
+        | "200";
+      status: "fulfilled" | "shipped" | "awaiting_shipment";
     };
     CompositeTypes: {
       [_ in never]: never;

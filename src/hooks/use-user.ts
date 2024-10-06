@@ -32,7 +32,7 @@ export function useUser() {
 
     if (data.session?.user) {
       const { data: user } = await supabase
-        .from("users")
+        .from("user")
         .select("*, subscription(*)")
         .eq("id", data.session.user.id)
         .single();

@@ -20,7 +20,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       title: "Billing",
-      href: "/dashboard/billing",
+      href: "/settings/billing",
       // icon: "billing",
     },
     {
