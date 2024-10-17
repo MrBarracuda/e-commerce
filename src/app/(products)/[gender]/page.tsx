@@ -25,24 +25,15 @@ export default async function ProductGender({ params }: ProductGenderProps) {
     return <div>Error fetching products</div>;
   }
 
-  console.log("response", response);
   const data = (await response.json()) as Product[];
-  console.log(data);
 
   return (
-    <section className="">
+    <section>
       <div className="container mx-auto px-5 py-16">
         <div className="-m-4 flex flex-wrap">
           {data.map((product) => (
-            <ProductItem key={product.id} {...product} />
+            <ProductItem key={product.id} gender={params.gender} {...product} />
           ))}
-
-          {/*{data.map((product) => (*/}
-          {/*  <div key={product.id}>*/}
-          {/*    <h2>{product.name}</h2>*/}
-          {/*    <p>{product.description}</p>*/}
-          {/*  </div>*/}
-          {/*))}*/}
         </div>
       </div>
     </section>

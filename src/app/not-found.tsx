@@ -1,10 +1,11 @@
-import { FileQuestion } from "lucide-react";
+import { Icons } from "@/components/icons";
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-screen flex-row items-center justify-center bg-[url(/bg-light.svg)] bg-cover bg-repeat dark:bg-[url(/bg-dark.svg)]">
-      <FileQuestion size={48} />
-      <h1 className="text-5xl font-bold">404: Page Not Found</h1>
+    <div className="grid h-[92vh] place-content-center bg-white px-4">
+      <h1 className="text-lg uppercase tracking-widest text-muted-foreground">
+        404 | Not Found
+      </h1>
     </div>
   );
 }

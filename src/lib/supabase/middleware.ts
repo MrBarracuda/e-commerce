@@ -17,6 +17,7 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           cookiesToSet.forEach(({ name, value, options }) =>
             request.cookies.set(name, value),
           );
@@ -38,23 +39,14 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getSession();
   const url = request.nextUrl.clone();
 
-  // if (!data.session?.user && !request.nextUrl.pathname.startsWith("/auth")) {
-  //   // no user, potentially respond by redirecting the user to the login page
-  //   url.pathname = "/auth";
-  //   return NextResponse.redirect(url);
-  // }
+  if (data.session && url.pathname.startsWith("/auth")) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
-  if (data.session) {
-    if (url.pathname.startsWith("/auth")) {
-      return NextResponse.redirect(new URL("/", request.url));
-      // return supabaseResponse;
-    }
-  } else {
-    if (protectedPaths.includes(url.pathname)) {
-      return NextResponse.redirect(
-        new URL("/auth?next=" + url.pathname, request.url),
-      );
-    }
+  if (!data.session && protectedPaths.includes(url.pathname)) {
+    return NextResponse.redirect(
+      new URL(`/auth?next=${url.pathname}`, request.url),
+    );
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're

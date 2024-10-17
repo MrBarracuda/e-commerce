@@ -4,13 +4,20 @@ import { authAction } from "@/app/auth/auth-action";
 import { useToast } from "@/hooks/use-toast";
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InputWithLabel } from "@/components/input-with-label";
-import { Form } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import LoginOauth from "@/app/auth/login-oauth";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { userAuthSchema } from "@/lib/validations/auth";
+import { Input } from "@/components/ui/input";
 
 export default function AuthForm() {
   const { toast } = useToast();
@@ -18,6 +25,7 @@ export default function AuthForm() {
     useHookFormAction(authAction, zodResolver(userAuthSchema), {
       formProps: {
         mode: "onSubmit",
+        defaultValues: { email: "" },
       },
       actionProps: {
         onSuccess: () => {
@@ -47,19 +55,30 @@ export default function AuthForm() {
           onSubmit={handleSubmitWithAction}
           className="flex flex-col space-y-4"
         >
-          <InputWithLabel
-            fieldTitle="Email"
-            nameInSchema="email"
-            readOnly={isLoading}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="example@gmail.com"
+                    disabled={isLoading}
+                    readOnly={isLoading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
           <button
             type="submit"
             className={cn(buttonVariants())}
             disabled={isLoading}
           >
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
+            {isLoading && <Icons.spinner className="mr-2 animate-spin" />}
             Sign In with Email
           </button>
           <LoginOauth />

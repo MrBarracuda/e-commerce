@@ -8,5 +8,7 @@ export default defineConfig({
   dbCredentials: {
     url: env.POSTGRES_URL,
   },
-  tablesFilter: ["e-commerce_*"],
-})
+  verbose: true,
+  strict: true,
+  // casing: "snake_case",
+});

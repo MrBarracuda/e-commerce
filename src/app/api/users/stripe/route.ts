@@ -1,24 +1,21 @@
 import { z } from "zod";
 
 import { stripe } from "@/lib/stripe";
-import { getUserSubscriptionPlan } from "@/lib/subscription";
 import { absoluteUrl } from "@/lib/utils";
 import { proPlan } from "@/config/subscription-plans";
 import { getCurrentUser } from "@/lib/user";
+import { getUserSubscriptionPlan } from "@/lib/actions/subscriptionService";
 
 const billingUrl = absoluteUrl("/settings/billing");
 
 export async function GET(req: Request) {
   try {
     const user = await getCurrentUser();
-    // const supabase = supabaseServer();
-    // const { data: { user } } = await supabase.auth.getUser()
 
-    if (!user?.email) {
+    if (!user) {
       return new Response(null, { status: 403 });
     }
 
-    console.log("user / sets metadata.userId to user.id", user.id);
     const subscriptionPlan = await getUserSubscriptionPlan(user.email);
 
     // The user is on the pro plan.

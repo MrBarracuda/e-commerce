@@ -1,44 +1,39 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabaseClient } from "@/lib/supabase/client";
+import type { User } from "@/types";
+import { getOneUser } from "@/lib/user";
 
-const initUser = {
+const initUser: User = {
   id: "",
   avatar: "",
-  full_name: "",
+  fullName: "",
   username: "",
   email: "",
-  password: "",
   phone: "",
+  dateOfBirth: "",
   createdAt: "",
-  date_of_birth: "",
-  subscription: {
-    email: "",
-    created_at: "",
-    expires_at: "",
-    customer_id: "",
-    subscription_id: "",
-    price_id: "",
-  },
+  updatedAt: "",
 };
 
 export function useUser() {
   const userQueryFn = async () => {
     const supabase = supabaseClient();
-    const { data, error } = await supabase.auth.getSession();
-    // const {
-    //   data: { user },
-    // } = await supabase.auth.getUser();
-    // console.log(user);
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
 
-    if (data.session?.user) {
-      const { data: user } = await supabase
-        .from("user")
-        .select("*, subscription(*)")
-        .eq("id", data.session.user.id)
-        .single();
-      return user;
+    if (error) {
+      console.error("Error fetching user from Supabase:", error);
     }
 
+    if (user) {
+      try {
+        return await getOneUser(user.id);
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    }
     return initUser;
   };
 

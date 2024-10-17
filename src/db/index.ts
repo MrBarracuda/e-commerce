@@ -10,6 +10,7 @@ import * as schema from "./schema";
  */
 const globalForDb = globalThis as unknown as {
   conn: postgres.Sql | undefined;
+  // casing: "snake_case",
 };
 
 const conn = globalForDb.conn ?? postgres(env.POSTGRES_URL);

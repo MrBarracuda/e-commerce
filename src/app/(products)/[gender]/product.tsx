@@ -2,14 +2,17 @@
 
 import Image from "next/image";
 import { type Product } from "@/types";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
-type ProductProps = Product;
+type ProductProps = { gender: string } & Product;
 
 export function ProductItem(props: ProductProps) {
+  const router = useRouter();
   return (
     <div
       className="w-full p-4 hover:scale-105 md:w-1/2 lg:w-1/4"
-      onClick={() => console.log(props.id)}
+      onClick={() => router.push(`/${props.gender}/${props.id}`)}
     >
       {/* html tag below used to be a link*/}
       <div className="relative block h-48 overflow-hidden rounded">

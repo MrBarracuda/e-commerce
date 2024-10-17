@@ -24,9 +24,9 @@ export default function LoginOauth() {
         disabled={isGitHubLoading}
       >
         {isGitHubLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          <Icons.spinner className="mr-2 animate-spin" />
         ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
+          <Icons.gitHub className="mr-2" />
         )}
         Github
       </button>
@@ -41,9 +41,9 @@ export default function LoginOauth() {
         disabled={isGoogleLoading}
       >
         {isGoogleLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          <Icons.spinner className="mr-2 animate-spin" />
         ) : (
-          <Icons.google className="mr-2 h-4 w-4" />
+          <Icons.google className="mr-2" />
         )}
         Google
       </button>
