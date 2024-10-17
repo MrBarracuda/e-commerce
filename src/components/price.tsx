@@ -1,11 +1,11 @@
 import { SubscriptionSection } from "@/app/settings/billing/subscription-section";
 import { getCurrentUser } from "@/lib/user";
-import { getUserSubscriptionPlan } from "@/lib/subscription";
+import { getUserSubscriptionPlan } from "@/lib/actions/subscriptionService";
 
 export async function Price() {
   const user = await getCurrentUser();
 
-  if (!user?.email) {
+  if (!user) {
     return false;
   }
 

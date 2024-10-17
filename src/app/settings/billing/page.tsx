@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 import { stripe } from "@/lib/stripe";
-import { getUserSubscriptionPlan } from "@/lib/subscription";
 import { BillingForm } from "@/components/billing-form";
 import { getCurrentUser } from "@/lib/user";
 import { Wrapper } from "@/components/wrapper";
+import { getUserSubscriptionPlan } from "@/lib/actions/subscriptionService";
 
 export const metadata = {
   title: "Billing",
@@ -14,10 +14,10 @@ export default async function BillingPage() {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/auth");
+    return false;
   }
 
-  const subscriptionPlan = await getUserSubscriptionPlan(user.email ?? "");
+  const subscriptionPlan = await getUserSubscriptionPlan(user.email);
 
   // If user has a pro plan, check cancel status on Stripe.
   let isCanceled = false;

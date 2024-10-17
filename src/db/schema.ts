@@ -9,9 +9,12 @@ import {
   real,
   boolean,
   pgEnum,
+  integer,
+  serial,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
+//TODO: Change all timestamp to Date type
 const createdAt = timestamp("created_at", {
   withTimezone: true,
   mode: "string",
@@ -30,17 +33,19 @@ const updatedAt = timestamp("updated_at", {
 export const userTable = pgTable(
   "user",
   {
-    id: uuid("id").unique().defaultRandom(),
+    id: uuid("id").unique().defaultRandom().notNull(),
     avatar: text("avatar"),
     fullName: text("full_name"),
     username: text("username").notNull(),
     email: text("email").notNull().unique(),
-    phone: text("phone_number"),
-    dateOfBirth: timestamp("created_at", { withTimezone: true, mode: "string" })
-      .defaultNow()
-      .notNull(),
+    //TODO: deprecate phone
+    phone: text("phone"),
+    dateOfBirth: timestamp("date_of_birth", {
+      withTimezone: true,
+      mode: "string",
+    }),
     createdAt,
-    //TODO add updatedAt
+    updatedAt,
   },
   (table) => {
     return {
@@ -51,6 +56,7 @@ export const userTable = pgTable(
 
 export const subscriptionTable = pgTable("subscription", {
   email: text("email")
+    .notNull()
     .primaryKey()
     .references(() => userTable.email, {
       onDelete: "cascade",
@@ -61,6 +67,7 @@ export const subscriptionTable = pgTable("subscription", {
   priceId: text("price_id"),
   expiresAt: timestamp("expires_at", { withTimezone: true, mode: "string" }),
   createdAt,
+  updatedAt,
   //TODO: maybe add isActive column and add updatedAt
 });
 
@@ -78,8 +85,9 @@ export const productSizeEnum = pgEnum("size", [
 ]);
 //TODO: add favorites, ratings, reviews, comments, etc.
 export const productTable = pgTable("product", {
-  id: uuid("id").primaryKey().defaultRandom(),
+  id: serial("id").primaryKey(),
   name: text("name"),
+  subName: text("sub_name"),
   description: text("description"),
   price: text("price"),
   image: text("image"),
@@ -96,19 +104,30 @@ export const addressTable = pgTable("address", {
       onUpdate: "cascade",
     })
     .notNull(),
-  name: text("name"),
-  street: text("street"),
+  title: text("name"),
+  addressLine1: text("address_line_1"),
+  addressLine2: text("address_line_2"),
   country: text("country"),
   city: text("city"),
   postalCode: text("postal_code"),
-  phoneNumber: text("phone_number"),
+  phone: text("phone"),
   createdAt,
   updatedAt,
 });
 
+export const subscriptionRelations = relations(
+  subscriptionTable,
+  ({ one }) => ({
+    user: one(userTable, {
+      fields: [subscriptionTable.email],
+      references: [userTable.email],
+    }),
+  }),
+);
+
 export const addressRelations = relations(addressTable, ({ many, one }) => ({
   orders: many(orderTable),
-  userTable: one(userTable, {
+  user: one(userTable, {
     fields: [addressTable.userId],
     references: [userTable.id],
   }),
@@ -120,25 +139,128 @@ export const orderStatusEnum = pgEnum("status", [
   "awaiting_shipment",
 ]);
 
+// export const orderTable = pgTable("order", {
+//   id: uuid("id").primaryKey().defaultRandom(),
+//   productId: serial("product_id").references(() => productTable.id),
+//   userId: uuid("user_id").references(() => userTable.id),
+//   cartId: serial("cart_id").references(() => cartTable.id),
+//   amount: real("amount"),
+//   isPaid: boolean("is_paid").default(false),
+//   status: orderStatusEnum("status"),
+//   addressId: uuid("address_id").references(() => addressTable.id),
+//   createdAt,
+//   updatedAt,
+// });
+
 export const orderTable = pgTable("order", {
   id: uuid("id").primaryKey().defaultRandom(),
-  productId: uuid("product_id").references(() => productTable.id),
   userId: uuid("user_id").references(() => userTable.id),
-  amount: real("amount"),
+  addressId: uuid("address_id").references(() => addressTable.id),
+  cartId: serial("cart_id").references(() => cartTable.id), // Reintroduced
   isPaid: boolean("is_paid").default(false),
   status: orderStatusEnum("status"),
-  shippingAddressId: uuid("address_id").references(() => addressTable.id),
   createdAt,
   updatedAt,
 });
 
-export const orderRelations = relations(orderTable, ({ one }) => ({
-  userTable: one(userTable, {
+export const orderItemTable = pgTable("order_item", {
+  id: serial("id").primaryKey(),
+  orderId: uuid("order_id").references(() => orderTable.id),
+  productId: serial("product_id").references(() => productTable.id),
+  quantity: integer("quantity").default(1).notNull(),
+  createdAt,
+  updatedAt,
+});
+
+export const cartTable = pgTable("cart", {
+  id: serial("id").primaryKey(),
+  userId: uuid("user_id")
+    .references(() => userTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    })
+    .notNull(),
+  totalAmount: real("total_amount").default(0).notNull(),
+  createdAt,
+  updatedAt,
+});
+
+export const cartItemTable = pgTable("cart_item", {
+  id: serial("id").primaryKey(),
+  cartId: serial("cart_id")
+    .references(() => cartTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    })
+    .notNull(),
+  productId: serial("product_id")
+    .references(() => productTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    })
+    .notNull(),
+  quantity: integer("quantity").default(1).notNull(),
+  createdAt,
+  updatedAt,
+});
+
+export const cartRelations = relations(cartTable, ({ many, one }) => ({
+  user: one(userTable, {
+    fields: [cartTable.userId],
+    references: [userTable.id],
+  }),
+  cartItems: many(cartItemTable),
+}));
+
+export const cartItemRelations = relations(cartItemTable, ({ one }) => ({
+  cart: one(cartTable, {
+    fields: [cartItemTable.cartId],
+    references: [cartTable.id],
+  }),
+  product: one(productTable, {
+    fields: [cartItemTable.productId],
+    references: [productTable.id],
+  }),
+}));
+
+// export const orderRelations = relations(orderTable, ({ one }) => ({
+//   user: one(userTable, {
+//     fields: [orderTable.userId],
+//     references: [userTable.id],
+//   }),
+//   address: one(addressTable, {
+//     fields: [orderTable.addressId],
+//     references: [addressTable.id],
+//   }),
+//   cart: one(cartTable, {
+//     fields: [orderTable.cartId],
+//     references: [cartTable.id],
+//   }),
+// }));
+
+export const orderRelations = relations(orderTable, ({ one, many }) => ({
+  user: one(userTable, {
     fields: [orderTable.userId],
     references: [userTable.id],
   }),
-  shippingAddress: one(addressTable, {
-    fields: [orderTable.shippingAddressId],
+  address: one(addressTable, {
+    fields: [orderTable.addressId],
     references: [addressTable.id],
+  }),
+  orderItems: many(orderItemTable),
+  cart: one(cartTable, {
+    fields: [orderTable.cartId],
+    references: [cartTable.id],
+  }),
+}));
+
+export const orderItemRelations = relations(orderItemTable, ({ one }) => ({
+  order: one(orderTable, {
+    fields: [orderItemTable.orderId],
+    references: [orderTable.id],
+  }),
+  product: one(productTable, {
+    fields: [orderItemTable.productId],
+    references: [productTable.id],
   }),
 }));

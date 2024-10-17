@@ -91,9 +91,7 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
             )}
           </div>
           <button className={cn(buttonVariants())} disabled={isLoading}>
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
+            {isLoading && <Icons.spinner className="mr-2 animate-spin" />}
             Sign In with Email
           </button>
         </div>

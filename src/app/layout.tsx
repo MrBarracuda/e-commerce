@@ -7,6 +7,7 @@ import { QueryProvider } from "@/components/query-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { Navbar } from "@/components/navbar";
 import { siteConfig } from "@/config/site";
+import { ScrollObserver } from "@/components/scroll-observer";
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -23,7 +24,11 @@ export default function RootLayout({
       className={`${GeistSans.variable}`}
       suppressHydrationWarning
     >
-      <body className="h-screen w-screen overflow-auto antialiased">
+      <body
+        data-scroll-direction="false"
+        // className="h-screen w-screen overflow-hidden antialiased group:"
+        className="group antialiased"
+      >
         <QueryProvider>
           <ThemeProvider
             attribute="class"
@@ -32,10 +37,12 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Navbar />
-            <div className="flex h-full w-full">
+            {/*<div className="flex h-full overflow-auto">*/}
+            <div>
               <main className="flex-grow">{children}</main>
             </div>
             <Toaster />
+            <ScrollObserver />
           </ThemeProvider>
         </QueryProvider>
       </body>

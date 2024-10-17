@@ -1,5 +1,9 @@
 import { type Icon, type Icons } from "@/components/icons";
-import { type productTable, type subscriptionTable } from "@/db/schema";
+import {
+  type productTable,
+  type subscriptionTable,
+  type userTable,
+} from "@/db/schema";
 import { type InferSelectModel } from "drizzle-orm";
 
 export type NavItem = {
@@ -60,6 +64,7 @@ export type SubscriptionPlan = {
 
 export type Subscription = InferSelectModel<typeof subscriptionTable>;
 export type Product = InferSelectModel<typeof productTable>;
+export type User = InferSelectModel<typeof userTable>;
 
 // export type UserSubscriptionPlan = SubscriptionPlan &
 //   Pick<Subscription, "customerId" | "subscriptionId" | "expiresAt"> & {

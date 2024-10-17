@@ -7,20 +7,17 @@ import { CartSheet } from "@/components/navbar/cart-sheet";
 
 export function Navbar() {
   return (
-    <div className="sticky inset-x-0 top-0 z-50 h-16 border-b bg-background">
-      <header className="relative">
-        <Wrapper>
-          <div className="flex h-16 items-center justify-between">
-            <MainNav items={navigationConfig.mainNav} />
-            <nav className="flex items-center gap-2">
-              {/*//TODO: add cart, favorite?, search? */}
-              <CartSheet />
-              <ModeToggle />
-              <Profile />
-            </nav>
-          </div>
-        </Wrapper>
-      </header>
-    </div>
+    <header className="sticky top-0 z-50 h-16">
+      <Wrapper className="border-b bg-background transition delay-150 group-[[data-scroll-direction='down']]:-translate-y-16">
+        <div className="flex h-16 items-center justify-between">
+          <MainNav items={navigationConfig.mainNav} />
+          <nav className="flex items-center gap-1.5">
+            <CartSheet />
+            <ModeToggle />
+            <Profile />
+          </nav>
+        </div>
+      </Wrapper>
+    </header>
   );
 }

@@ -13,46 +13,42 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useQueryClient } from "@tanstack/react-query";
-import { usePathname, useRouter } from "next/navigation";
-import { supabaseClient } from "@/lib/supabase/client";
+import { usePathname } from "next/navigation";
 import { useUser } from "@/hooks/use-user";
 import { Skeleton } from "@/components/ui/skeleton";
-import { protectedPaths } from "@/config/protected-paths";
-import { type Route } from "next";
 import { useToast } from "@/hooks/use-toast";
+import { useAction } from "next-safe-action/hooks";
+import { logOut } from "@/lib/actions/auth";
 
 export function Profile() {
   const queryClient = useQueryClient();
-  const router = useRouter();
   const pathname = usePathname();
+  const { data: user, isFetching } = useUser();
+  const { executeAsync } = useAction(logOut, {
+    onSuccess,
+    onError,
+  });
   const { toast } = useToast();
 
-  // TODO: move this logic to auth-form, create a global store for user data object
-  const { data: user, isFetching } = useUser();
-
-  const handleLogOut = async () => {
-    const supabase = supabaseClient();
-    queryClient.clear();
-    const { error } = await supabase.auth.signOut();
-    router.refresh();
-
-    if (protectedPaths.includes(pathname)) {
-      router.replace(("/auth?next=" + pathname) as Route);
-    }
-
-    if (error) {
-      return toast({
-        title: "Something went wrong.",
-        description: "Your log out request failed. Please try again.",
-        variant: "destructive",
-      });
-    }
-
-    return toast({
+  function onSuccess() {
+    toast({
       title: "Log out successfully",
       description: "Come back ",
     });
-  };
+  }
+
+  function onError() {
+    toast({
+      title: "Something went wrong.",
+      description: "Your log out request failed. Please try again.",
+      variant: "destructive",
+    });
+  }
+
+  async function handleLogOut() {
+    await executeAsync(pathname);
+    queryClient.clear();
+  }
 
   if (isFetching) {
     return (
@@ -67,13 +63,11 @@ export function Profile() {
   if (user?.id) {
     return (
       <DropdownMenu>
-        <DropdownMenuTrigger asChild aria-hidden>
-          <Button variant="ghost" size="icon" aria-label="profile dropdown">
-            <Avatar>
-              <AvatarImage src={user.avatar ?? ""} />
-              <AvatarFallback>{user.username?.slice(0, 1)}</AvatarFallback>
-            </Avatar>
-          </Button>
+        <DropdownMenuTrigger aria-label="profile dropdown">
+          <Avatar>
+            <AvatarImage src={user.avatar ?? ""} alt="profile image" />
+            <AvatarFallback>{user.username?.slice(0, 1)}</AvatarFallback>
+          </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>{user.username}</DropdownMenuLabel>
@@ -93,7 +87,7 @@ export function Profile() {
               aria-label="dashboard"
               className="appearance-none"
             >
-              {/*TODO: Allow to navigate to dashboard if user has role of a seller */}
+              {/*TODO: Allow to navigate to dashboard if user has role of a admin */}
               Dashboard
             </Link>
           </DropdownMenuItem>
@@ -112,7 +106,6 @@ export function Profile() {
   return (
     <Link href="/auth">
       <Button variant="ghost" size="icon" aria-label="join us or login">
-        {/*TODO: fix issue two focus elements exist instead of one */}
         <Icons.profile />
       </Button>
     </Link>
