@@ -1,64 +1,38 @@
-import { EditProfileForm } from "@/app/settings/profile/edit-profile-form";
-import { Wrapper } from "@/components/wrapper";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import { EditPhoneForm } from "@/app/settings/profile/_components/edit-phone-form";
-import { EditUsernameForm } from "@/app/settings/profile/_components/edit-username-form";
-import { ProfileSettingsForm } from "@/app/settings/profile/_components";
+import { getUserDTO } from "@/data-access/user";
+import { getAddress } from "@/data-access/address";
+import { EditUserForm } from "@/app/settings/profile/_components/edit-user-form";
+import { EditAddressForm } from "@/app/settings/profile/_components/edit-address-form";
+import { BillingNew } from "@/app/settings/profile/_components/billing";
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
+  const userData = getUserDTO();
+  const addressData = getAddress();
+
+  const [user, address] = await Promise.all([userData, addressData]);
+
+  const userInitialValues = {
+    username: user?.username ?? "",
+    firstName: user?.fullName?.split(" ")[0] ?? "",
+    lastName: user?.fullName?.split(" ")[1] ?? "",
+    dateOfBirth: user?.dateOfBirth ? new Date(user.dateOfBirth) : new Date(),
+  };
+
+  const addressInitialValues = {
+    name: address?.name ?? "",
+    city: address?.city ?? "",
+    addressLine1: address?.addressLine1 ?? "",
+    addressLine2: address?.addressLine2 ?? "",
+    postalCode: address?.postalCode ?? "",
+    country: address?.country ?? "",
+    phone: address?.phone ?? "",
+  };
+
   return (
-    <Wrapper className="max-w-screen-xl py-14 md:px-12">
-      {/*<div className="container mx-auto px-14 py-14">*/}
-      {/*<h1 className="mb-6 text-xl font-bold">Edit your profile</h1>*/}
-      <div className="block md:grid md:grid-cols-4 md:space-x-10">
-        {/*left side*/}
-        <div className="fixed hidden space-y-6 md:block">
-          <h2 className="break-all text-3xl font-bold">
-            Account
-            <br /> Management
-          </h2>
-          <ul>
-            <li>
-              <Link
-                href="#username"
-                className={cn(
-                  buttonVariants({ variant: "link" }),
-                  "-ml-4 text-sm font-semibold uppercase underline hover:text-muted-foreground",
-                )}
-              >
-                user name
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#phone"
-                className={cn(
-                  buttonVariants({ variant: "link" }),
-                  "-ml-4 font-semibold uppercase hover:text-muted-foreground",
-                )}
-              >
-                phone
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#address"
-                className={cn(
-                  buttonVariants({ variant: "link" }),
-                  "-ml-4 font-semibold uppercase hover:text-muted-foreground",
-                )}
-              >
-                address
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        {/*right side*/}
-        <ProfileSettingsForm />
-      </div>
-    </Wrapper>
+    <div className="col-span-3 space-y-7 md:col-start-2">
+      <EditUserForm {...userInitialValues} />
+      {/*<EditUsernameForm username={user?.username ?? ""} />*/}
+      <EditAddressForm initialValues={addressInitialValues} />
+      <BillingNew />
+    </div>
   );
 }

@@ -96,6 +96,7 @@ export const productTable = pgTable("product", {
   updatedAt,
 });
 
+//TODO: change text to varchar with a limit declared in addressFormSchema
 export const addressTable = pgTable("address", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id")
@@ -104,7 +105,7 @@ export const addressTable = pgTable("address", {
       onUpdate: "cascade",
     })
     .notNull(),
-  title: text("name"),
+  name: text("name"),
   addressLine1: text("address_line_1"),
   addressLine2: text("address_line_2"),
   country: text("country"),

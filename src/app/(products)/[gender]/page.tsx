@@ -1,8 +1,7 @@
 import { notFound } from "next/navigation";
 import { navigationConfig } from "@/config/navigation";
-import { fetchProducts } from "@/app/(products)/fetchProducts";
-import { type Product } from "@/types";
 import { ProductItem } from "@/app/(products)/[gender]/product";
+import { getProducts } from "@/lib/actions/product";
 
 type ProductGenderProps = {
   params: {
@@ -19,13 +18,13 @@ export default async function ProductGender({ params }: ProductGenderProps) {
     notFound();
   }
 
-  const response = await fetchProducts();
+  const data = await getProducts();
 
-  if (!response.ok) {
-    return <div>Error fetching products</div>;
-  }
-
-  const data = (await response.json()) as Product[];
+  // if (!response.ok) {
+  //   return <div>Error fetching products</div>;
+  // }
+  //
+  // const data = (await response.json()) as Product[];
 
   return (
     <section>

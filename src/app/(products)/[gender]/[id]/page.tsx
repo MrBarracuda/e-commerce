@@ -6,15 +6,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { fetchProducts } from "@/app/(products)/fetchProducts";
-import type { Product } from "@/types";
 import Image from "next/image";
-import { Icons } from "@/components/icons";
 import { notFound } from "next/navigation";
 import Stripe from "stripe";
 import { env } from "@/env";
-import { CheckoutForm } from "@/app/(products)/[gender]/[id]/_components/checkout-form";
-import { getCurrentUser } from "@/lib/user";
+import { getProductById } from "@/lib/actions/product";
 
 type ProductDetailsProps = {
   params: {
@@ -26,25 +22,14 @@ type ProductDetailsProps = {
 const stripe = new Stripe(env.STRIPE_SK);
 
 export default async function ProductDetails({ params }: ProductDetailsProps) {
-  const response = await fetchProducts(params.id);
-  // const user = await getCurrentUser();
-
-  // if (!user) {
-  //   return false;
-  // }
-
-  if (!response.ok) {
-    return <div>Error fetching product</div>;
-  }
-
-  const data = (await response.json()) as Product;
+  const data = await getProductById(params.id);
 
   if (!data) {
     return notFound();
   }
 
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: Number(data.price) * 100,
+    amount: Number(data?.price) * 100,
     currency: "USD",
     payment_method_types: ["card"],
     // customer_email: userEmail,

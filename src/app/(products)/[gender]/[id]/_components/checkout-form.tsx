@@ -20,8 +20,8 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { type FormEvent, useState } from "react";
-import { userOrderExists } from "@/app/actions/orders";
-import getStripe from "@/lib/get-stripe-js";
+import { getStripe } from "@/lib/get-stripe-js";
+import { userOrderExists } from "@/lib/actions/order";
 
 type CheckoutFormProps = {
   product: Product;

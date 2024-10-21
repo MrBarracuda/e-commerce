@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { type Product } from "@/types";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
 type ProductProps = { gender: string } & Product;

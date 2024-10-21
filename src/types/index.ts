@@ -1,5 +1,6 @@
 import { type Icon, type Icons } from "@/components/icons";
 import {
+  type addressTable,
   type productTable,
   type subscriptionTable,
   type userTable,
@@ -65,6 +66,7 @@ export type SubscriptionPlan = {
 export type Subscription = InferSelectModel<typeof subscriptionTable>;
 export type Product = InferSelectModel<typeof productTable>;
 export type User = InferSelectModel<typeof userTable>;
+export type Address = InferSelectModel<typeof addressTable>;
 
 // export type UserSubscriptionPlan = SubscriptionPlan &
 //   Pick<Subscription, "customerId" | "subscriptionId" | "expiresAt"> & {

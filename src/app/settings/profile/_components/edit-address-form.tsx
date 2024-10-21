@@ -1,157 +1,149 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import Form from "@/components/composables/form";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { updateAddress } from "@/lib/actions/auth";
-import { useToast } from "@/hooks/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
+import { addressFormSchema } from "@/lib/validations/auth";
+import { useToast } from "@/hooks/use-toast";
 import { Icons } from "@/components/icons";
-import { $EditAddress } from "@/lib/validations/auth";
+import { addressFormAction } from "@/lib/actions/address";
+import { type Address } from "@/types";
 
-export function EditAddressForm() {
+type Props = {
+  initialValues: {
+    name: string;
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    postalCode: string;
+    country: string;
+    phone: string;
+  };
+};
+
+export function EditAddressForm({ initialValues }: Props) {
   const { toast } = useToast();
-
-  const { form, action, handleSubmitWithAction, resetFormAndAction } =
-    useHookFormAction(updateAddress, zodResolver($EditAddress), {
-      formProps: {
-        mode: "onSubmit",
-        defaultValues: {
-          name: "",
-          country: "",
-          city: "",
-          street: "",
-          postalCode: "",
-        },
+  const {
+    form,
+    resetFormAndAction,
+    action: { execute, status },
+  } = useHookFormAction(addressFormAction, zodResolver(addressFormSchema), {
+    formProps: {
+      mode: "onSubmit",
+      values: {
+        ...initialValues,
       },
-      actionProps: {
-        onSuccess: () => {
-          toast({
-            title: "Success!",
-            description: "Phone number updated successfully",
-          });
-          resetFormAndAction();
-        },
-        onError: () => {
-          toast({
-            title: "Something went wrong!",
-            description: "Your update request failed. Please try again.",
-            variant: "destructive",
-          });
-        },
+    },
+    actionProps: {
+      onSuccess: () => {
+        toast({
+          title: "Address information updated.",
+          description:
+            "You can check your address information on your profile page.",
+        });
+        resetFormAndAction();
       },
-    });
+      onError: () => {
+        toast({
+          title: "Something went wrong.",
+          description: "Your address information could not be updated.",
+          variant: "destructive",
+        });
+      },
+    },
+  });
 
   return (
-    <Form {...form}>
-      <form onSubmit={handleSubmitWithAction} className="grid grid-cols-7">
-        <div className="col-span-3 space-y-2 rounded-l-xl bg-secondary">
-          <div className="p-6">
-            <h2 className="text-xl font-light">
-              <span className="font-semibold">Address Information. </span>This
-              requires to be filled out in order to place orders.
-            </h2>
-          </div>
+    <div className="grid grid-cols-7" id="address">
+      <div className="col-span-3 space-y-2 rounded-l-xl bg-secondary">
+        <div className="p-6">
+          <h2 className="text-xl font-light">
+            <span className="font-semibold">Address Information. </span>This
+            requires to be filled out in order to place orders.
+          </h2>
         </div>
+      </div>
 
-        <div className="col-span-4 flex flex-col space-y-5 rounded-r-xl bg-primary-foreground p-6">
-          <FormField
+      <Form.Root
+        form={form}
+        action={execute}
+        className="col-span-4 flex flex-col space-y-5 rounded-r-xl bg-primary-foreground p-6"
+      >
+        <Form.Field
+          control={form.control}
+          name="name"
+          label="Name"
+          render={({ field }) => <Input {...field} />}
+        />
+        <div className="flex gap-x-4">
+          <Form.Field
             control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel className="text-md font-semibold">Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            name="addressLine1"
+            label="Address Line 1"
+            className="w-full"
+            render={({ field }) => <Input {...field} />}
           />
-
-          <FormField
+          <Form.Field
             control={form.control}
-            name="country"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel className="text-md font-semibold">Country</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            name="addressLine2"
+            label="Address Line 2"
+            className="w-full"
+            render={({ field }) => <Input required={false} {...field} />}
           />
-
-          <FormField
+        </div>
+        <Form.Field
+          control={form.control}
+          name="country"
+          label="Country"
+          render={({ field }) => <Input {...field} />}
+        />
+        <div className="flex gap-x-4">
+          <Form.Field
             control={form.control}
             name="city"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel className="text-md font-semibold">City</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="City"
+            className="w-full"
+            render={({ field }) => <Input {...field} />}
           />
-
-          <div className="flex flex-row space-x-5">
-            <FormField
-              control={form.control}
-              name="street"
-              render={({ field }) => (
-                <FormItem className="w-1/2">
-                  <FormLabel className="text-md font-semibold">
-                    Street
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="postalCode"
-              render={({ field }) => (
-                <FormItem className="w-1/2">
-                  <FormLabel className="text-md font-semibold">
-                    Postal code
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
+          <Form.Field
+            control={form.control}
+            name="postalCode"
+            label="Postal Code"
+            className="w-full"
+            render={({ field }) => <Input {...field} />}
+          />
+        </div>
+        <Form.Field
+          control={form.control}
+          name="phone"
+          label="Phone"
+          render={({ field }) => <Input type="number" {...field} />}
+        />
+        <div className="flex justify-end gap-x-4">
           <Button
-            type="submit"
-            className="ml-auto w-1/3"
-            disabled={action.isExecuting}
+            variant="secondary"
+            className="w-1/6"
+            disabled={status === "executing"}
+            type="reset"
+            onClick={resetFormAndAction}
           >
-            {action.isExecuting ? (
+            Reset
+          </Button>
+          <Button
+            className="w-1/6"
+            disabled={status === "executing"}
+            type="submit"
+          >
+            {status === "executing" ? (
               <Icons.spinner className="animate-spin" />
             ) : (
               "Save"
             )}
           </Button>
         </div>
-      </form>
-    </Form>
+      </Form.Root>
+    </div>
   );
 }

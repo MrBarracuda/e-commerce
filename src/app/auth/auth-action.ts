@@ -1,6 +1,5 @@
 "use server";
 
-import { returnValidationErrors } from "next-safe-action";
 import { actionClient } from "@/lib/safe-action";
 import { supabaseServer } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
@@ -10,19 +9,16 @@ export const authAction = actionClient
   .schema(userAuthSchema)
   .action(async ({ parsedInput: { email } }) => {
     const supabase = supabaseServer();
-    const { error } = await supabase.auth.signInWithOtp({ email });
-    if (error) {
-      returnValidationErrors(userAuthSchema, {
-        _errors: ["Invalid email1"],
-        email: {
-          _errors: ["Invalid email2"],
-        },
-      });
-    }
-    //
-    revalidatePath("/");
-    // redirect("/");
+    // const { data, error } = await supabase.auth.signInWithOtp({ email });
+    console.log(email);
+    //TODO: improve handling of errors
+    // if (error) {
+    //   return { successful: false, error: error.message };
+    // }
 
+    revalidatePath("/");
+
+    // TODO: return a different shape of the response
     return {
       successful: true,
       email,
