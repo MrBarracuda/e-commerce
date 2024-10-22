@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { productTable, userTable } from "@/db/schema";
+import { productTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function getProducts() {
@@ -7,13 +7,7 @@ export async function getProducts() {
 }
 
 export async function getProductById(id: string) {
-  // return await db
-  //   .select()
-  //   .from(productTable)
-  //   .where(eq(productTable.id, Number(id)))
-  //   .then((result) => result[0]);
-
   return db.query.productTable.findFirst({
-    where: eq(productTable.id, Number(id)),
+    where: eq(productTable.id, parseInt(id)),
   });
 }

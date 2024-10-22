@@ -19,17 +19,18 @@ export async function userOrderExists(userId: string, productId: string) {
   //   },
   // });
 
-  const order = await db.query.orderTable
-    .leftJoin(orderItemTable, eq(orderTable.id, orderItemTable.orderId))
-    .findFirst({
-      where: and(
-        eq(orderTable.userId, userId),
-        eq(orderItemTable.productId, productId),
-      ),
-      columns: {
-        id: true,
-      },
-    });
+  // const order = await db.query.orderTable
+  //   .leftJoin(orderItemTable, eq(orderTable.id, orderItemTable.orderId))
+  //   .findFirst({
+  //     where: and(
+  //       eq(orderTable.userId, userId),
+  //       eq(orderItemTable.productId, productId),
+  //     ),
+  //     columns: {
+  //       id: true,
+  //     },
+  //   });
 
-  return order != null;
+  // return order != null;
+  return null;
 }

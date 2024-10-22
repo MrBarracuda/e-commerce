@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
-import { userFormSchema } from "@/lib/validations/auth";
 import { useToast } from "@/hooks/use-toast";
 import { Icons } from "@/components/icons";
-import { userFormAction } from "@/lib/actions/user";
 import { DatePicker } from "@/components/ui/date-picker";
 import { FormTitle } from "@/app/settings/profile/_components/form-title";
+import { userFormAction } from "./action";
+
+import { userFormSchema } from "./validation";
 
 type Props = {
   username: string;
@@ -19,7 +20,7 @@ type Props = {
   dateOfBirth: Date;
 };
 
-export function EditUserForm({
+export function UserForm({
   username,
   firstName,
   lastName,

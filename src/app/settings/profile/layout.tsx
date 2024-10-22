@@ -16,15 +16,6 @@ export default function SettingsLayout({
           </h2>
           <div className="flex flex-col items-start gap-y-0.5">
             <Link
-              href="#username"
-              className={cn(
-                buttonVariants({ variant: "link" }),
-                "-ml-4 text-sm font-semibold uppercase underline hover:text-muted-foreground",
-              )}
-            >
-              user name
-            </Link>
-            <Link
               href="#personal-information"
               className={cn(
                 buttonVariants({ variant: "link" }),
@@ -41,6 +32,15 @@ export default function SettingsLayout({
               )}
             >
               address
+            </Link>
+            <Link
+              href="#subscription"
+              className={cn(
+                buttonVariants({ variant: "link" }),
+                "-ml-4 font-semibold uppercase hover:text-muted-foreground",
+              )}
+            >
+              subscription
             </Link>
           </div>
         </div>

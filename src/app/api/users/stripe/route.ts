@@ -3,14 +3,14 @@ import { z } from "zod";
 import { stripe } from "@/lib/stripe";
 import { absoluteUrl } from "@/lib/utils";
 import { proPlan } from "@/config/subscription-plans";
-import { getCurrentUser } from "@/lib/user";
 import { getUserSubscriptionPlan } from "@/lib/actions/subscriptionService";
+import { getUser } from "@/data-access/user";
 
 const billingUrl = absoluteUrl("/settings/billing");
 
 export async function GET(req: Request) {
   try {
-    const user = await getCurrentUser();
+    const user = await getUser();
 
     if (!user) {
       return new Response(null, { status: 403 });

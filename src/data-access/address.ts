@@ -1,12 +1,12 @@
 "use server";
 
 import { db } from "@/db";
-import { addressTable, userTable } from "@/db/schema";
-import { type AddressForm } from "@/lib/validations/auth";
+import { addressTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { getCurrentUserId } from "@/data-access/auth";
+import { type AddressForm } from "@/app/settings/profile/(address)/validation";
 
-export async function setAddressDTO(address: AddressForm) {
+export async function updateAddress(address: AddressForm) {
   const id = await getCurrentUserId();
 
   await db

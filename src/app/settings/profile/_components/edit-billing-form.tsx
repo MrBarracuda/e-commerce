@@ -48,7 +48,7 @@ export function BillingForm({
   }
 
   return (
-    <div className="grid grid-cols-7" id="personal-information">
+    <div className="grid grid-cols-7" id="subscription">
       <FormTitle
         title="Subscription Plan"
         subtitle={`You are currently on the ${subscriptionPlan.name} plan.`}

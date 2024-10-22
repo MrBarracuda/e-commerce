@@ -2,11 +2,11 @@
 
 import { db } from "@/db";
 import { userTable } from "@/db/schema";
-import { type UserForm } from "@/lib/validations/auth";
 import { eq } from "drizzle-orm";
 import { getCurrentUserId } from "@/data-access/auth";
+import { type UserForm } from "@/app/settings/profile/(user)/validation";
 
-export async function updateUserDTO(user: UserForm) {
+export async function updateUser(user: UserForm) {
   const id = await getCurrentUserId();
 
   await db
@@ -15,7 +15,7 @@ export async function updateUserDTO(user: UserForm) {
     .where(eq(userTable.id, id));
 }
 
-export async function getUserDTO() {
+export async function getUser() {
   const id = await getCurrentUserId();
 
   return db.query.userTable.findFirst({

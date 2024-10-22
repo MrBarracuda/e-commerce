@@ -1,18 +1,15 @@
-"use client";
-
 import { Wrapper } from "@/components/wrapper";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { useUser } from "@/hooks/use-user";
+import { getUser } from "@/data-access/user";
 
-export default function Profile() {
-  // const user = await getCurrentUser();
-  const { data: user } = useUser();
+export default async function Profile() {
+  const user = await getUser();
 
-  // improve handling such flow
+  // improve handling this error in the future
   if (!user) {
-    return <div>Loading...</div>;
+    return false;
   }
 
   return (

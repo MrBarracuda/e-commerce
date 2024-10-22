@@ -1,11 +1,11 @@
-import { getUserDTO } from "@/data-access/user";
+import { getUser } from "@/data-access/user";
 import { getAddress } from "@/data-access/address";
-import { EditUserForm } from "@/app/settings/profile/_components/edit-user-form";
-import { EditAddressForm } from "@/app/settings/profile/_components/edit-address-form";
 import { BillingNew } from "@/app/settings/profile/_components/billing";
+import { AddressForm } from "@/app/settings/profile/(address)/form";
+import { UserForm } from "@/app/settings/profile/(user)/form";
 
 export default async function ProfilePage() {
-  const userData = getUserDTO();
+  const userData = getUser();
   const addressData = getAddress();
 
   const [user, address] = await Promise.all([userData, addressData]);
@@ -29,9 +29,8 @@ export default async function ProfilePage() {
 
   return (
     <div className="col-span-3 space-y-7 md:col-start-2">
-      <EditUserForm {...userInitialValues} />
-      {/*<EditUsernameForm username={user?.username ?? ""} />*/}
-      <EditAddressForm initialValues={addressInitialValues} />
+      <UserForm {...userInitialValues} />
+      <AddressForm initialValues={addressInitialValues} />
       <BillingNew />
     </div>
   );

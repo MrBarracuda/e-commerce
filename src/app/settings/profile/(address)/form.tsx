@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
-import { addressFormSchema } from "@/lib/validations/auth";
 import { useToast } from "@/hooks/use-toast";
 import { Icons } from "@/components/icons";
-import { addressFormAction } from "@/lib/actions/address";
-import { type Address } from "@/types";
+
+import { addressFormSchema } from "./validation";
+import { addressFormAction } from "./action";
 
 type Props = {
   initialValues: {
@@ -23,7 +23,7 @@ type Props = {
   };
 };
 
-export function EditAddressForm({ initialValues }: Props) {
+export function AddressForm({ initialValues }: Props) {
   const { toast } = useToast();
   const {
     form,

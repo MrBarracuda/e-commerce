@@ -1,10 +1,11 @@
 "use server";
 
 import { actionClient } from "@/lib/safe-action";
-import { userFormSchema } from "@/lib/validations/auth";
 import { flattenValidationErrors } from "next-safe-action";
-import { updateUserDTO } from "@/data-access/user";
+import { updateUser } from "@/data-access/user";
 import { handleError } from "@/lib/utils";
+
+import { userFormSchema } from "./validation";
 
 export const userFormAction = actionClient
   .schema(userFormSchema, {
@@ -12,9 +13,8 @@ export const userFormAction = actionClient
       flattenValidationErrors(ve).fieldErrors,
   })
   .action(async ({ parsedInput }) => {
-    console.log(parsedInput);
     try {
-      await updateUserDTO(parsedInput);
+      await updateUser(parsedInput);
       // revalidatePath("/profile/settings");
     } catch (err) {
       handleError(err);

@@ -1,9 +1,8 @@
-import { redirect } from "next/navigation";
 import { stripe } from "@/lib/stripe";
 import { BillingForm } from "@/components/billing-form";
-import { getCurrentUser } from "@/lib/user";
 import { Wrapper } from "@/components/wrapper";
 import { getUserSubscriptionPlan } from "@/lib/actions/subscriptionService";
+import { getUser } from "@/data-access/user";
 
 export const metadata = {
   title: "Billing",
@@ -11,7 +10,7 @@ export const metadata = {
 };
 
 export default async function BillingPage() {
-  const user = await getCurrentUser();
+  const user = await getUser();
 
   if (!user) {
     return false;

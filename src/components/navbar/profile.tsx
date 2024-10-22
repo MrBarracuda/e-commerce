@@ -18,13 +18,13 @@ import { useUser } from "@/hooks/use-user";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { useAction } from "next-safe-action/hooks";
-import { logOut } from "@/lib/actions/auth";
+import { logoutAction } from "@/lib/actions/auth";
 
 export function Profile() {
   const queryClient = useQueryClient();
   const pathname = usePathname();
-  const { data: user, isFetching } = useUser();
-  const { executeAsync } = useAction(logOut, {
+  const { data: user, isLoading, isRefetching } = useUser();
+  const { executeAsync } = useAction(logoutAction, {
     onSuccess,
     onError,
   });
@@ -50,7 +50,7 @@ export function Profile() {
     queryClient.clear();
   }
 
-  if (isFetching) {
+  if (isLoading || isRefetching) {
     return (
       <Avatar>
         <AvatarFallback>
