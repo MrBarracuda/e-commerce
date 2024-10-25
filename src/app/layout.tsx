@@ -8,7 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Navbar } from "@/components/navbar";
 import { siteConfig } from "@/config/site";
 import { ScrollObserver } from "@/components/scroll-observer";
-import { Footer, TestFooter } from "@/components/footer";
+import { TestFooter } from "@/components/footer";
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -39,7 +39,6 @@ export default function RootLayout({
             <div className="flex w-full flex-col">
               <Navbar />
               <main>{children}</main>
-              {/*<Footer />*/}
               <TestFooter />
             </div>
             <Toaster />
