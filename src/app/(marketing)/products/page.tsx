@@ -21,7 +21,7 @@ export default async function ProductList() {
   const data = await getProducts();
 
   return (
-    <Container>
+    <Container className="mx-auto">
       <ul className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
         {data.map((product) => (
           <li key={product.id}>

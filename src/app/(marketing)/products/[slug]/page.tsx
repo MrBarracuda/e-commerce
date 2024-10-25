@@ -16,18 +16,18 @@ import { getCurrentUserId } from "@/data-access/auth";
 import Container from "@/components/container";
 import { Separator } from "@/components/ui/separator";
 import { QuantityInput } from "@/components/quantity-input";
-import { ProductDetailsForm } from "@/app/(marketing)/products/[id]/form";
+import { ProductDetailsForm } from "./form";
 
 type ProductDetailsProps = {
   params: {
-    id: string;
+    slug: string;
   };
 };
 
 const stripe = new Stripe(env.STRIPE_SK);
 
 export default async function ProductDetails({ params }: ProductDetailsProps) {
-  const data = await getProductById(params.id);
+  const data = await getProductById(params.slug);
   const id = await getCurrentUserId();
 
   if (!data) {

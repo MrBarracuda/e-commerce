@@ -40,6 +40,10 @@ export function formatPrice(
   }).format(Number(price));
 }
 
+export function convertPrice(price: number) {
+  return price / 100;
+}
+
 export function handleError(err: unknown) {
   if (err instanceof TypeError) {
     console.log(err.message);

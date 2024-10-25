@@ -14,36 +14,22 @@ import {
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
-//TODO: Change all timestamp to Date type
-const createdAt = timestamp("created_at", {
-  withTimezone: true,
-  mode: "string",
-})
-  .defaultNow()
-  .notNull();
+const createdAt = timestamp("created_at").defaultNow().notNull();
 
-const updatedAt = timestamp("updated_at", {
-  withTimezone: true,
-  mode: "string",
-})
+const updatedAt = timestamp("updated_at")
   .defaultNow()
   .notNull()
-  .$onUpdate(() => new Date().toDateString());
+  .$onUpdate(() => new Date());
 
 export const userTable = pgTable(
   "user",
   {
-    id: uuid("id").unique().defaultRandom().notNull(),
+    id: uuid("id").defaultRandom().notNull(),
     avatar: text("avatar"),
     fullName: text("full_name"),
     username: text("username").notNull(),
-    email: text("email").notNull().unique(),
-    //TODO: deprecate phone
-    phone: text("phone"),
-    dateOfBirth: timestamp("date_of_birth", {
-      withTimezone: true,
-      mode: "string",
-    }),
+    email: text("email").notNull(),
+    birthDate: timestamp("birth_date"),
     createdAt,
     updatedAt,
   },
@@ -56,42 +42,31 @@ export const userTable = pgTable(
 
 export const subscriptionTable = pgTable("subscription", {
   email: text("email")
-    .notNull()
     .primaryKey()
     .references(() => userTable.email, {
       onDelete: "cascade",
-      onUpdate: "cascade",
     }),
   subscriptionId: text("subscription_id"),
   customerId: text("customer_id"),
   priceId: text("price_id"),
-  expiresAt: timestamp("expires_at", { withTimezone: true, mode: "string" }),
+  expiresAt: timestamp("expires_at"),
   createdAt,
   updatedAt,
-  //TODO: maybe add isActive column and add updatedAt
 });
 
-export const productSizeEnum = pgEnum("size", [
-  "5",
-  "10",
-  "15",
-  "30",
-  "50",
-  "75",
-  "100",
-  "125",
-  "150",
-  "200",
-]);
-//TODO: add favorites, ratings, reviews, comments, etc.
+export const productSizeEnum = pgEnum("size", ["100", "250", "1000"]);
+export const productGrindEnum = pgEnum("grind", ["whole-bean", "ground"]);
+
 export const productTable = pgTable("product", {
   id: serial("id").primaryKey(),
-  name: text("name"),
-  subName: text("sub_name"),
+  title: text("title").notNull(),
+  slug: text("slug").unique().notNull(),
+  flavorProfile: text("flavor_profile").notNull(),
   description: text("description"),
-  price: text("price"),
+  price: integer("price").notNull(), // stored in cents
+  size: productSizeEnum("size").notNull(),
+  grind: productGrindEnum("grind").notNull(),
   image: text("image"),
-  size: productSizeEnum("size"),
   createdAt,
   updatedAt,
 });
@@ -102,7 +77,6 @@ export const addressTable = pgTable("address", {
   userId: uuid("user_id")
     .references(() => userTable.id, {
       onDelete: "cascade",
-      onUpdate: "cascade",
     })
     .notNull(),
   name: text("name"),
@@ -178,7 +152,6 @@ export const cartTable = pgTable("cart", {
   userId: uuid("user_id")
     .references(() => userTable.id, {
       onDelete: "cascade",
-      onUpdate: "cascade",
     })
     .notNull(),
   totalAmount: real("total_amount").default(0).notNull(),
@@ -191,13 +164,11 @@ export const cartItemTable = pgTable("cart_item", {
   cartId: serial("cart_id")
     .references(() => cartTable.id, {
       onDelete: "cascade",
-      onUpdate: "cascade",
     })
     .notNull(),
   productId: serial("product_id")
     .references(() => productTable.id, {
       onDelete: "cascade",
-      onUpdate: "cascade",
     })
     .notNull(),
   quantity: integer("quantity").default(1).notNull(),
