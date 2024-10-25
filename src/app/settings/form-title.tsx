@@ -10,7 +10,7 @@ export function FormTitle({
       <div className="p-6">
         <h2 className="text-xl font-light">
           <span className="font-semibold">{title}. </span>
-          {subtitle}
+          {subtitle}.
         </h2>
       </div>
     </div>

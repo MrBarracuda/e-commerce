@@ -1,8 +1,9 @@
 import { stripe } from "@/lib/stripe";
 import { getUserSubscriptionPlan } from "@/lib/actions/subscriptionService";
-import { BillingForm } from "@/app/settings/profile/_components/edit-billing-form";
 
-export async function BillingNew() {
+import { BillingFormNew } from "./form";
+
+export async function BillingSection() {
   //TODO: change to use user id, remove hardcoded email
   const subscriptionPlan = await getUserSubscriptionPlan("1dima9999@gmail.com");
 
@@ -16,7 +17,7 @@ export async function BillingNew() {
   }
 
   return (
-    <BillingForm
+    <BillingFormNew
       subscriptionPlan={{
         ...subscriptionPlan,
         isCanceled,

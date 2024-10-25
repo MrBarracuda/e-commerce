@@ -8,7 +8,7 @@ import { CartSheet } from "@/components/navbar/cart-sheet";
 export function Navbar() {
   return (
     <header className="sticky top-0 z-50 h-16">
-      <Wrapper className="border-b bg-background transition delay-150 group-[[data-scroll-direction='down']]:-translate-y-16">
+      <Wrapper className="bg-background drop-shadow-sm transition delay-150 group-[[data-scroll-direction='down']]:-translate-y-16 dark:border-b">
         <div className="flex h-16 items-center justify-between">
           <MainNav items={navigationConfig.mainNav} />
           <nav className="flex items-center gap-1.5">

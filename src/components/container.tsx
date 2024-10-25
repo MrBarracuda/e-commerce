@@ -14,7 +14,7 @@ export default function Container({
 }: BoundedProps) {
   return (
     <Component
-      className={cn("px-5 py-14 md:px-6 md:py-20 lg:py-24", className)}
+      className={cn("lg:py-18 px-5 py-12 md:px-6 md:py-16", className)}
       {...restProps}
     >
       <div className="mx-auto flex w-full max-w-7xl flex-col items-center">

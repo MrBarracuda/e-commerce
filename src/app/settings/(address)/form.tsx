@@ -10,6 +10,7 @@ import { Icons } from "@/components/icons";
 
 import { addressFormSchema } from "./validation";
 import { addressFormAction } from "./action";
+import { FormTitle } from "../form-title";
 
 type Props = {
   initialValues: {
@@ -57,14 +58,11 @@ export function AddressForm({ initialValues }: Props) {
 
   return (
     <div className="grid grid-cols-7" id="address">
-      <div className="col-span-3 space-y-2 rounded-l-xl bg-secondary">
-        <div className="p-6">
-          <h2 className="text-xl font-light">
-            <span className="font-semibold">Address Information. </span>This
-            requires to be filled out in order to place orders.
-          </h2>
-        </div>
-      </div>
+      <FormTitle
+        title="Address Information"
+        subtitle="This
+            requires to be filled out in order to place orders"
+      />
 
       <Form.Root
         form={form}
@@ -75,6 +73,7 @@ export function AddressForm({ initialValues }: Props) {
           control={form.control}
           name="name"
           label="Name"
+          disabled={status === "executing"}
           render={({ field }) => <Input {...field} />}
         />
         <div className="flex gap-x-4">
@@ -83,6 +82,7 @@ export function AddressForm({ initialValues }: Props) {
             name="addressLine1"
             label="Address Line 1"
             className="w-full"
+            disabled={status === "executing"}
             render={({ field }) => <Input {...field} />}
           />
           <Form.Field
@@ -90,6 +90,7 @@ export function AddressForm({ initialValues }: Props) {
             name="addressLine2"
             label="Address Line 2"
             className="w-full"
+            disabled={status === "executing"}
             render={({ field }) => <Input required={false} {...field} />}
           />
         </div>
@@ -97,6 +98,7 @@ export function AddressForm({ initialValues }: Props) {
           control={form.control}
           name="country"
           label="Country"
+          disabled={status === "executing"}
           render={({ field }) => <Input {...field} />}
         />
         <div className="flex gap-x-4">
@@ -105,6 +107,7 @@ export function AddressForm({ initialValues }: Props) {
             name="city"
             label="City"
             className="w-full"
+            disabled={status === "executing"}
             render={({ field }) => <Input {...field} />}
           />
           <Form.Field
@@ -112,6 +115,7 @@ export function AddressForm({ initialValues }: Props) {
             name="postalCode"
             label="Postal Code"
             className="w-full"
+            disabled={status === "executing"}
             render={({ field }) => <Input {...field} />}
           />
         </div>
@@ -119,6 +123,7 @@ export function AddressForm({ initialValues }: Props) {
           control={form.control}
           name="phone"
           label="Phone"
+          disabled={status === "executing"}
           render={({ field }) => <Input type="number" {...field} />}
         />
         <div className="flex justify-end gap-x-4">

@@ -8,7 +8,7 @@ import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hoo
 import { useToast } from "@/hooks/use-toast";
 import { Icons } from "@/components/icons";
 import { DatePicker } from "@/components/ui/date-picker";
-import { FormTitle } from "@/app/settings/profile/_components/form-title";
+import { FormTitle } from "../form-title";
 import { userFormAction } from "./action";
 
 import { userFormSchema } from "./validation";
@@ -63,9 +63,9 @@ export function UserForm({
   return (
     <div className="grid grid-cols-7" id="personal-information">
       <FormTitle
-        title="User Information."
+        title="User Information"
         subtitle="This
-            requires to be filled out in order to..."
+            requires to be filled out in order to"
       />
 
       <Form.Root
@@ -77,6 +77,7 @@ export function UserForm({
           control={form.control}
           name="username"
           label="Username"
+          disabled={status === "executing"}
           render={({ field }) => <Input {...field} />}
         />
         <div className="flex gap-x-4">
@@ -85,6 +86,7 @@ export function UserForm({
             name="firstName"
             label="First name"
             className="w-full"
+            disabled={status === "executing"}
             render={({ field }) => <Input {...field} />}
           />
           <Form.Field
@@ -92,6 +94,7 @@ export function UserForm({
             name="lastName"
             label="Last name"
             className="w-full"
+            disabled={status === "executing"}
             render={({ field }) => <Input {...field} />}
           />
         </div>
@@ -100,6 +103,7 @@ export function UserForm({
           name="dateOfBirth"
           label="Date of birth"
           className="flex flex-col"
+          disabled={status === "executing"}
           render={({ field }) => <DatePicker {...field} />}
         />
 

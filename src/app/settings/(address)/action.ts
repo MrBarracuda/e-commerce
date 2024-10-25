@@ -2,20 +2,23 @@
 
 import { actionClient } from "@/lib/safe-action";
 import { flattenValidationErrors } from "next-safe-action";
-import { updateUser } from "@/data-access/user";
+import { updateAddress } from "@/data-access/address";
 import { handleError } from "@/lib/utils";
+import { z } from "zod";
 
-import { userFormSchema } from "./validation";
+import { addressFormSchema } from "./validation";
+import { revalidatePath } from "next/cache";
 
-export const userFormAction = actionClient
-  .schema(userFormSchema, {
+export const addressFormAction = actionClient
+  .schema(addressFormSchema, {
     handleValidationErrorsShape: (ve) =>
       flattenValidationErrors(ve).fieldErrors,
   })
+  .outputSchema(z.void())
   .action(async ({ parsedInput }) => {
     try {
-      await updateUser(parsedInput);
-      // revalidatePath("/profile/settings");
+      await updateAddress(parsedInput);
+      revalidatePath("/profile/settings");
     } catch (err) {
       handleError(err);
     }

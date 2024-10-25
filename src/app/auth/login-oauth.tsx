@@ -7,8 +7,8 @@ import { useState } from "react";
 
 export default function LoginOauth() {
   const searchParams = useSearchParams();
-  const [isGitHubLoading, setIsGitHubLoading] = useState<boolean>(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
+  const [isGitHubLoading, setIsGitHubLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   const next = searchParams.get("next") ?? "";
 

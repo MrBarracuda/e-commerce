@@ -34,6 +34,7 @@ export function BillingForm({
     setIsLoading(!isLoading);
 
     // Get a Stripe session URL.
+    //TODO: Migrate stripe session logic from API to server action
     const response = await fetch("/api/users/stripe");
 
     if (!response?.ok) {

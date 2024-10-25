@@ -1,6 +1,6 @@
-import { SubscriptionSection } from "@/app/settings/billing/subscription-section";
 import { getUserSubscriptionPlan } from "@/lib/actions/subscriptionService";
 import { getUser } from "@/data-access/user";
+import { SubscriptionSection } from "@/components/subscription-section";
 
 export async function Price() {
   // const user = await getUser();

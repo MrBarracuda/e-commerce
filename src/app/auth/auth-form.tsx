@@ -49,41 +49,39 @@ export default function AuthForm() {
   const isLoading = form.formState.isLoading;
 
   return (
-    <>
-      <Form {...form}>
-        <form
-          onSubmit={handleSubmitWithAction}
-          className="flex flex-col space-y-4"
+    <Form {...form}>
+      <form
+        onSubmit={handleSubmitWithAction}
+        className="flex flex-col space-y-4"
+      >
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="example@gmail.com"
+                  disabled={isLoading}
+                  readOnly={isLoading}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <button
+          type="submit"
+          className={cn(buttonVariants())}
+          disabled={isLoading}
         >
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="example@gmail.com"
-                    disabled={isLoading}
-                    readOnly={isLoading}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <button
-            type="submit"
-            className={cn(buttonVariants())}
-            disabled={isLoading}
-          >
-            {isLoading && <Icons.spinner className="mr-2 animate-spin" />}
-            Sign In with Email
-          </button>
-          <LoginOauth />
-        </form>
-      </Form>
-    </>
+          {isLoading && <Icons.spinner className="mr-2 animate-spin" />}
+          Sign In with Email
+        </button>
+        <LoginOauth />
+      </form>
+    </Form>
   );
 }

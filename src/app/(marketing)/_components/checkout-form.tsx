@@ -57,7 +57,7 @@ export function CheckoutForm({
         <Form
           price={product.price ?? ""}
           clientSecret={clientSecret}
-          productId={product.id}
+          productId={product.id.toString()}
           userId={userId}
         />
       </Elements>

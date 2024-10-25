@@ -1,4 +1,4 @@
-import "server-only";
+"use server";
 
 import { cache } from "react";
 import { supabaseServer } from "@/lib/supabase/server";

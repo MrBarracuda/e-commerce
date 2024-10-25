@@ -30,14 +30,6 @@ export function CartSheet() {
           aria-label="cart"
         >
           <Icons.cart />
-          <span
-            className={cn(
-              itemCount === 0 ? "hidden" : "",
-              "absolute top-4 text-xs font-bold",
-            )}
-          >
-            {itemCount}
-          </span>
         </Button>
       </SheetTrigger>
       <SheetContent className="flex w-full flex-col pr-0 sm:max-w-lg">

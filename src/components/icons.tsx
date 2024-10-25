@@ -8,6 +8,7 @@ import {
   MagnifyingGlassIcon,
   ChevronRightIcon,
   ChevronLeftIcon,
+  HamburgerMenuIcon,
 } from "@radix-ui/react-icons";
 import {
   type ForwardRefExoticComponent,
@@ -31,6 +32,7 @@ export const Icons = {
   chevronRight: ChevronRightIcon,
   search: MagnifyingGlassIcon,
   profile: PersonIcon,
+  hamburgerMenu: HamburgerMenuIcon,
   check: HeartIcon, // update icon
   package: HeartIcon, // update icon
   swords: HeartIcon, // update icon
