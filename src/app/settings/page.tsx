@@ -14,7 +14,7 @@ export default async function ProfilePage() {
     username: user?.username ?? "",
     firstName: user?.fullName?.split(" ")[0] ?? "",
     lastName: user?.fullName?.split(" ")[1] ?? "",
-    dateOfBirth: user?.dateOfBirth ? new Date(user.dateOfBirth) : new Date(),
+    birthDate: user?.birthDate ? new Date(user.birthDate) : new Date(),
   };
 
   const addressInitialValues = {
@@ -32,6 +32,7 @@ export default async function ProfilePage() {
       <UserForm {...userInitialValues} />
       <AddressForm initialValues={addressInitialValues} />
       <BillingSection />
+      {/*//TODO: Add delete account form*/}
     </div>
   );
 }

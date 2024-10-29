@@ -38,7 +38,7 @@ export function CartSheet() {
         </SheetHeader>
         {itemCount > 0 ? (
           <>
-            <div className="flex w-full flex-col pr-6">
+            <div className="flex w-full flex-1 flex-col pr-6">
               {/*TODO: Cart logic*/}
               cart items
             </div>

@@ -8,17 +8,20 @@ export const getCurrentUserId = cache(async () => {
   const { data, error } = await supabase.auth.getSession();
 
   if (error) {
-    throw new Error("Error getting session");
+    return { err: "Error getting session", id: null };
   }
 
   if (!data.session) {
-    throw new Error("No session found");
+    return { err: "No session found", id: null };
   }
 
-  if (data.session.user.aud === "authenticated") {
+  if (data?.session?.user?.aud === "authenticated") {
     console.log("GET CURRENT USER ID FUNCTION HAS BEEN FIRED");
-    return data.session.user.id;
+    return { err: null, id: data.session.user.id };
   }
 
-  throw new Error("User is not authenticated or unknown error");
+  return {
+    err: "User is not authenticated or unknown error",
+    id: null,
+  };
 });

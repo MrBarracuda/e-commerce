@@ -6,7 +6,7 @@ export const userFormSchema = z.object({
     .trim()
     .min(3, "Username must be at least 3 characters long")
     .max(16, "Username must be at most 16 characters long"),
-  dateOfBirth: z.date({ required_error: "A date of birth is required." }),
+  birthDate: z.date({ required_error: "A date of birth is required." }),
   firstName: z
     .string()
     .trim()

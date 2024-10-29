@@ -9,6 +9,7 @@ import { Navbar } from "@/components/navbar";
 import { siteConfig } from "@/config/site";
 import { ScrollObserver } from "@/components/scroll-observer";
 import { TestFooter } from "@/components/footer";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -37,9 +38,11 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <div className="flex w-full flex-col">
-              <Navbar />
-              <main>{children}</main>
-              <TestFooter />
+              <NuqsAdapter>
+                <Navbar />
+                <main>{children}</main>
+                <TestFooter />
+              </NuqsAdapter>
             </div>
             <Toaster />
             <ScrollObserver />

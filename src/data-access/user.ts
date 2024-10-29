@@ -4,10 +4,14 @@ import { db } from "@/db";
 import { userTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { getCurrentUserId } from "@/data-access/auth";
-import { type UserForm } from "@/app/settings/profile/(user)/validation";
+import { type UserForm } from "@/app/settings/(user)/validation";
 
 export async function updateUser(user: UserForm) {
-  const id = await getCurrentUserId();
+  const { err, id } = await getCurrentUserId();
+
+  if (!id) {
+    throw new Error(err ?? "No user id");
+  }
 
   await db
     .update(userTable)
@@ -16,9 +20,18 @@ export async function updateUser(user: UserForm) {
 }
 
 export async function getUser() {
-  const id = await getCurrentUserId();
+  const { err, id } = await getCurrentUserId();
+
+  if (!id) {
+    console.log(err ?? "No user id");
+    return null;
+  }
 
   return db.query.userTable.findFirst({
-    where: eq(userTable.id, id),
+    where: (model) => eq(model.id, id),
   });
+
+  // return db.query.userTable.findFirst({
+  //   where: eq(userTable.id, id),
+  // });
 }

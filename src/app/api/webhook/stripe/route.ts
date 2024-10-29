@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
     event = stripe.webhooks.constructEvent(body, signature, endpointSecret);
     console.log(`🔔  Webhook received: ${event.type}`);
   } catch (error: any) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     console.log(`❌ Error message: ${error.message}`);
     return new Response(
       `Webhook Error: ${error instanceof Error ? error.message : "Unknown error."}`,

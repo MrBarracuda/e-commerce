@@ -63,21 +63,21 @@ export type Database = {
         Row: {
           created_at: string;
           id: number;
-          total_amount: number;
+          total: number;
           updated_at: string;
           user_id: string;
         };
         Insert: {
           created_at?: string;
           id?: number;
-          total_amount?: number;
+          total?: number;
           updated_at?: string;
           user_id: string;
         };
         Update: {
           created_at?: string;
           id?: number;
-          total_amount?: number;
+          total?: number;
           updated_at?: string;
           user_id?: string;
         };
@@ -129,6 +129,13 @@ export type Database = {
             columns: ["product_id"];
             isOneToOne: false;
             referencedRelation: "product";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "cart_item_product_id_product_sku_id_fk";
+            columns: ["product_id"];
+            isOneToOne: false;
+            referencedRelation: "product_sku";
             referencedColumns: ["id"];
           },
         ];
@@ -228,43 +235,129 @@ export type Database = {
             referencedRelation: "product";
             referencedColumns: ["id"];
           },
+          {
+            foreignKeyName: "order_item_product_id_product_sku_id_fk";
+            columns: ["product_id"];
+            isOneToOne: false;
+            referencedRelation: "product_sku";
+            referencedColumns: ["id"];
+          },
         ];
       };
       product: {
         Row: {
           created_at: string;
           description: string | null;
+          flavor_profile: string;
           id: number;
           image: string | null;
-          name: string | null;
-          price: string | null;
-          size: Database["public"]["Enums"]["size"] | null;
-          sub_name: string | null;
+          in_stock: boolean | null;
+          slug: string;
+          title: string;
           updated_at: string;
         };
         Insert: {
           created_at?: string;
           description?: string | null;
+          flavor_profile: string;
           id?: number;
           image?: string | null;
-          name?: string | null;
-          price?: string | null;
-          size?: Database["public"]["Enums"]["size"] | null;
-          sub_name?: string | null;
+          in_stock?: boolean | null;
+          slug: string;
+          title: string;
           updated_at?: string;
         };
         Update: {
           created_at?: string;
           description?: string | null;
+          flavor_profile?: string;
           id?: number;
           image?: string | null;
-          name?: string | null;
-          price?: string | null;
-          size?: Database["public"]["Enums"]["size"] | null;
-          sub_name?: string | null;
+          in_stock?: boolean | null;
+          slug?: string;
+          title?: string;
           updated_at?: string;
         };
         Relationships: [];
+      };
+      product_attribute: {
+        Row: {
+          created_at: string;
+          id: number;
+          type: Database["public"]["Enums"]["attribute_type"];
+          updated_at: string;
+          value: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          type: Database["public"]["Enums"]["attribute_type"];
+          updated_at?: string;
+          value: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          type?: Database["public"]["Enums"]["attribute_type"];
+          updated_at?: string;
+          value?: string;
+        };
+        Relationships: [];
+      };
+      product_sku: {
+        Row: {
+          created_at: string;
+          grind_attribute_id: number;
+          id: number;
+          price: number;
+          product_id: number;
+          size_attribute_id: number;
+          sku: string;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          grind_attribute_id?: number;
+          id?: number;
+          price: number;
+          product_id?: number;
+          size_attribute_id?: number;
+          sku: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          grind_attribute_id?: number;
+          id?: number;
+          price?: number;
+          product_id?: number;
+          size_attribute_id?: number;
+          sku?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "product_sku_grind_attribute_id_product_attribute_id_fk";
+            columns: ["grind_attribute_id"];
+            isOneToOne: false;
+            referencedRelation: "product_attribute";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "product_sku_product_id_product_id_fk";
+            columns: ["product_id"];
+            isOneToOne: false;
+            referencedRelation: "product";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "product_sku_size_attribute_id_product_attribute_id_fk";
+            columns: ["size_attribute_id"];
+            isOneToOne: false;
+            referencedRelation: "product_attribute";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       subscription: {
         Row: {
@@ -307,34 +400,31 @@ export type Database = {
       user: {
         Row: {
           avatar: string | null;
+          birth_date: string | null;
           created_at: string;
-          date_of_birth: string | null;
           email: string;
           full_name: string | null;
           id: string;
-          phone: string | null;
           updated_at: string;
           username: string;
         };
         Insert: {
           avatar?: string | null;
+          birth_date?: string | null;
           created_at?: string;
-          date_of_birth?: string | null;
           email: string;
           full_name?: string | null;
           id?: string;
-          phone?: string | null;
           updated_at?: string;
           username: string;
         };
         Update: {
           avatar?: string | null;
+          birth_date?: string | null;
           created_at?: string;
-          date_of_birth?: string | null;
           email?: string;
           full_name?: string | null;
           id?: string;
-          phone?: string | null;
           updated_at?: string;
           username?: string;
         };
@@ -351,17 +441,7 @@ export type Database = {
       };
     };
     Enums: {
-      size:
-        | "5"
-        | "10"
-        | "15"
-        | "30"
-        | "50"
-        | "75"
-        | "100"
-        | "125"
-        | "150"
-        | "200";
+      attribute_type: "size" | "grind";
       status: "fulfilled" | "shipped" | "awaiting_shipment";
     };
     CompositeTypes: {

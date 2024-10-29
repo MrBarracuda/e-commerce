@@ -64,8 +64,8 @@
     @apply bg-background text-foreground;
   }
 
-  svg {
-    width: 20px;
-    height: 20px;
-  }
+  /*svg {*/
+  /*  width: 18px;*/
+  /*  height: 18px;*/
+  /*}*/
 }

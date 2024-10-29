@@ -10,7 +10,7 @@ const billingUrl = absoluteUrl("/settings/profile");
 
 export async function subscribeAction() {
   try {
-    const id = await getCurrentUserId();
+    const { id } = await getCurrentUserId();
 
     const subscriptionPlan = await getUserSubscriptionPlan(
       "1dima9999@gmail.com",

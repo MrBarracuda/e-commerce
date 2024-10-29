@@ -4,11 +4,11 @@ import Container from "@/components/container";
 
 export function Hero() {
   return (
-    <Container className="bg-background bg-cover bg-repeat py-16 dark:bg-[url(/bg-dark.svg)]">
+    // bg-background bg-cover bg-repeat py-16 dark:bg-[url(/bg-dark.svg)]
+    <Container className="bg-background">
       <div className="mx-auto flex flex-col items-center py-16 text-center">
         <h1 className="-m-1 text-balance font-serif text-5xl font-semibold tracking-tighter sm:text-6xl">
-          Discover premium perfume replicas with unmatched{" "}
-          <span className="text-[#cbe449]">quality</span>
+          Discover premium perfume replicas with unmatched quality
         </h1>
         <p className="mt-6 max-w-prose text-lg text-muted-foreground">
           Experience the luxury of high-end fragrances at a fraction of the
@@ -19,7 +19,7 @@ export function Hero() {
           <Link href="/products" className={buttonVariants()}>
             Browse Bestsellers
           </Link>
-          <button className={buttonVariants({ variant: "ghost" })}>
+          <button className={buttonVariants({ variant: "outline" })}>
             Contact Us &rarr;
           </button>
         </div>

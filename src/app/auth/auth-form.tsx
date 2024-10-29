@@ -50,21 +50,19 @@ export default function AuthForm() {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={handleSubmitWithAction}
-        className="flex flex-col space-y-4"
-      >
+      <form onSubmit={handleSubmitWithAction} className="flex flex-col gap-y-4">
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="sr-only">Email</FormLabel>
               <FormControl>
                 <Input
                   placeholder="example@gmail.com"
                   disabled={isLoading}
                   readOnly={isLoading}
+                  autoCorrect="off"
                   {...field}
                 />
               </FormControl>
@@ -80,6 +78,16 @@ export default function AuthForm() {
           {isLoading && <Icons.spinner className="mr-2 animate-spin" />}
           Sign In with Email
         </button>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
+          </div>
+        </div>
         <LoginOauth />
       </form>
     </Form>

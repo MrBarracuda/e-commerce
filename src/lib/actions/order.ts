@@ -8,7 +8,7 @@ import { and, eq } from "drizzle-orm";
 //   return values && values.length > 0 ? values[0] : undefined;
 // };
 
-export async function userOrderExists(userId: string, productId: string) {
+export async function userOrderExists(userId: string, productId: number) {
   // const order = await db.query.orderTable.findFirst({
   //   where: and(
   //     eq(orderTable.userId, userId),

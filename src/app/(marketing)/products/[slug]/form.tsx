@@ -7,52 +7,123 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { QuantityInput } from "@/components/quantity-input";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { type ProductSKU } from "@/types";
+import { useQueryState } from "nuqs";
+import { useMemo } from "react";
 
-export function ProductDetailsForm({ price }: { price: string }) {
-  const [size, setSize] = useState("250");
-  const [ground, setGround] = useState("whole-bean");
+type Props = {
+  id: number;
+  price: number;
+  sku: string;
+  sizeAttribute: {
+    type: string;
+    value: string;
+  };
+  grindAttribute: {
+    type: string;
+    value: string;
+  };
+};
+
+export function ProductDetailsForm({ skus }: { skus: Props[] }) {
+  const [size, setSize] = useQueryState("size");
+  const [grind, setGrind] = useQueryState("grind");
+
+  console.log(skus);
+
+  const sizeOptions = useMemo(() => {
+    const uniqueSizes = Array.from(
+      new Set(skus.map((sku) => sku.sizeAttribute.value)),
+    ).sort((a, b) => Number(a) - Number(b));
+
+    return uniqueSizes.map((value) => ({
+      value,
+      label: value === "1000" ? "1 KG" : `${value} G`,
+    }));
+  }, [skus]);
+
+  const grindOptions = useMemo(() => {
+    const uniqueGrinds = Array.from(
+      new Set(skus.map((sku) => sku.grindAttribute.value)),
+    );
+
+    return uniqueGrinds.map((value) => ({
+      value,
+      label: value === "whole-bean" ? "Whole Bean" : "Ground",
+    }));
+  }, [skus]);
+
+  const selectedSku = useMemo(() => {
+    return skus.find(
+      (sku) =>
+        sku.sizeAttribute.value === (size ?? sizeOptions[0]?.value) &&
+        sku.grindAttribute.value === (grind ?? grindOptions[0]?.value),
+    );
+  }, [skus, size, grind, sizeOptions, grindOptions]);
+
+  function addToCart() {
+    const res = {
+      size: size ?? sizeOptions[0]?.value ?? "100",
+      grind: grind ?? grindOptions[0]?.value ?? "whole-bean",
+      price: selectedSku?.price,
+    };
+
+    console.log(res);
+  }
 
   return (
     <div className="mb-5 flex flex-col items-start justify-between gap-y-5 pb-5">
       <div className="w-full flex-col items-center space-y-1">
         <span className="font-light">Size:</span>
-        <Select defaultValue={size} onValueChange={setSize}>
+        <Select
+          defaultValue={sizeOptions[0]?.value}
+          value={size ?? sizeOptions[0]?.value}
+          onValueChange={setSize}
+        >
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="font-light">
-            <SelectItem value="100">100 G</SelectItem>
-            <SelectItem value="250">250 G</SelectItem>
-            <SelectItem value="1000">1 KG</SelectItem>
+            {sizeOptions.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
 
       <div className="w-full flex-col items-center space-y-1">
         <span className="font-light">Grind:</span>
-        <Select defaultValue={ground} onValueChange={setGround}>
+        <Select
+          defaultValue={grindOptions[0]?.value}
+          value={grind ?? grindOptions[0]?.value}
+          onValueChange={setGrind}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Select size" />
           </SelectTrigger>
           <SelectContent className="font-light">
-            <SelectItem value="whole-bean">Whole Bean</SelectItem>
-            <SelectItem value="ground">Ground</SelectItem>
+            {grindOptions.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
 
-      <QuantityInput />
+      {/*<QuantityInput />*/}
 
       <Button
         type="submit"
         size="lg"
         className="inline-flex w-full justify-center gap-x-4 font-light uppercase"
+        onClick={addToCart}
       >
         <span>Add to cart</span>
-        <span>${price}</span>
+        <span>${selectedSku?.price ?? "--"}</span>
       </Button>
     </div>
   );

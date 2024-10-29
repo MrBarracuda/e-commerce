@@ -29,6 +29,8 @@ type CheckoutFormProps = {
   userId: string;
 };
 
+const mockPrice = "999";
+
 export function CheckoutForm({
   product,
   clientSecret,
@@ -41,13 +43,13 @@ export function CheckoutForm({
           <Image
             fill
             src="https://dummyimage.com/400x400"
-            alt={product.name ?? ""}
+            alt={product.title ?? ""}
             className="object-cover"
           />
         </div>
         <div>
-          <div className="text-xl">${product.price}</div>
-          <h2 className="text-2xl font-bold">{product.name}</h2>
+          <div className="text-xl">${mockPrice}</div>
+          <h2 className="text-2xl font-bold">{product.title}</h2>
           <div className="line-clamp-3 text-muted-foreground">
             {product.description}
           </div>
@@ -55,9 +57,9 @@ export function CheckoutForm({
       </div>
       <Elements options={{ clientSecret }} stripe={getStripe()}>
         <Form
-          price={product.price ?? ""}
+          price={mockPrice}
           clientSecret={clientSecret}
-          productId={product.id.toString()}
+          productId={product.id}
           userId={userId}
         />
       </Elements>
@@ -72,7 +74,7 @@ function Form({
 }: {
   price: string;
   clientSecret?: string;
-  productId: string;
+  productId: number;
   userId: string;
 }) {
   const stripe = useStripe();

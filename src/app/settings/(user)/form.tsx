@@ -17,15 +17,10 @@ type Props = {
   username: string;
   firstName: string;
   lastName: string;
-  dateOfBirth: Date;
+  birthDate: Date;
 };
 
-export function UserForm({
-  username,
-  firstName,
-  lastName,
-  dateOfBirth,
-}: Props) {
+export function UserForm({ username, firstName, lastName, birthDate }: Props) {
   const { toast } = useToast();
   const {
     form,
@@ -38,7 +33,7 @@ export function UserForm({
         username,
         firstName,
         lastName,
-        dateOfBirth,
+        birthDate,
       },
     },
     actionProps: {
@@ -100,7 +95,7 @@ export function UserForm({
         </div>
         <Form.Field
           control={form.control}
-          name="dateOfBirth"
+          name="birthDate"
           label="Date of birth"
           className="flex flex-col"
           disabled={status === "executing"}
