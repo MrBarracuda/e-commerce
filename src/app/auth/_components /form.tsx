@@ -1,6 +1,6 @@
 "use client";
 
-import { authAction } from "@/app/auth/auth-action";
+import { authAction } from "@/app/auth/action";
 import { useToast } from "@/hooks/use-toast";
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,41 +12,45 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import LoginOauth from "@/app/auth/login-oauth";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { userAuthSchema } from "@/lib/validations/auth";
 import { Input } from "@/components/ui/input";
+import { LoginOauth } from "./login-oauth";
 
-export default function AuthForm() {
+export function AuthForm() {
   const { toast } = useToast();
-  const { form, handleSubmitWithAction, resetFormAndAction } =
-    useHookFormAction(authAction, zodResolver(userAuthSchema), {
-      formProps: {
-        mode: "onSubmit",
-        defaultValues: { email: "" },
+  const {
+    form,
+    handleSubmitWithAction,
+    resetFormAndAction,
+    action: { status },
+  } = useHookFormAction(authAction, zodResolver(userAuthSchema), {
+    formProps: {
+      mode: "onSubmit",
+      defaultValues: { email: "" },
+    },
+    actionProps: {
+      onSuccess: () => {
+        toast({
+          title: "Check your email",
+          description:
+            "We sent you a login link. Be sure to check your spam too.",
+        });
+        resetFormAndAction();
       },
-      actionProps: {
-        onSuccess: () => {
-          toast({
-            title: "Check your email",
-            description:
-              "We sent you a login link. Be sure to check your spam too.",
-          });
-          resetFormAndAction();
-        },
-        onError: () => {
-          toast({
-            title: "Something went wrong.",
-            description: "Your sign in request failed. Please try again.",
-            variant: "destructive",
-          });
-        },
+      onError: () => {
+        toast({
+          title: "Something went wrong.",
+          description: "Your sign in request failed. Please try again.",
+          variant: "destructive",
+        });
       },
-    });
+    },
+  });
 
-  const isLoading = form.formState.isLoading;
+  // const isLoading = form.formState.isLoading;
 
   return (
     <Form {...form}>
@@ -60,9 +64,10 @@ export default function AuthForm() {
               <FormControl>
                 <Input
                   placeholder="example@gmail.com"
-                  disabled={isLoading}
-                  readOnly={isLoading}
+                  disabled={status === "executing"}
+                  readOnly={status === "executing"}
                   autoCorrect="off"
+                  autoCapitalize="off"
                   {...field}
                 />
               </FormControl>
@@ -73,9 +78,11 @@ export default function AuthForm() {
         <button
           type="submit"
           className={cn(buttonVariants())}
-          disabled={isLoading}
+          disabled={status === "executing"}
         >
-          {isLoading && <Icons.spinner className="mr-2 animate-spin" />}
+          {status === "executing" && (
+            <Icons.spinner className="mr-2 animate-spin" />
+          )}
           Sign In with Email
         </button>
         <div className="relative">

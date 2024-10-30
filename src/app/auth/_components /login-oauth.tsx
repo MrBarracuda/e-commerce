@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { useState } from "react";
 
-export default function LoginOauth() {
+export function LoginOauth() {
   const searchParams = useSearchParams();
   const [isGitHubLoading, setIsGitHubLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
