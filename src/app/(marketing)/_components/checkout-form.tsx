@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { type FormEvent, useState } from "react";
 import { getStripe } from "@/lib/get-stripe-js";
 import { userOrderExists } from "@/lib/actions/order";
+import { Icons } from "@/components/icons";
 
 type CheckoutFormProps = {
   product: Product;
@@ -43,7 +44,7 @@ export function CheckoutForm({
           <Image
             fill
             src="https://dummyimage.com/400x400"
-            alt={product.title ?? ""}
+            alt={product.image ?? ""}
             className="object-cover"
           />
         </div>
@@ -103,7 +104,7 @@ function Form({
       const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: "http://localhost:3000",
+          return_url: "http://localhost:3000/order",
           shipping: {
             address: {
               city: "San Francisco",
@@ -119,7 +120,7 @@ function Form({
       });
 
       if (error.type === "card_error" || error.type === "validation_error") {
-        setErrorMessage(`stripe error: ${error.message}`);
+        setErrorMessage(`Error: ${error.message}`);
       } else {
         setErrorMessage("An unknown error occurred");
       }
@@ -150,11 +151,18 @@ function Form({
         <CardFooter>
           <Button
             className="w-full"
+            // className="w-full"
             size="lg"
             type="submit"
             disabled={stripe === null || elements === null || isLoading}
           >
-            {isLoading ? "Loading..." : `Pay ${price}`}
+            {isLoading ? (
+              <Icons.spinner className="mr-2 animate-spin" />
+            ) : (
+              `Pay $${price}`
+            )}
+
+            {/*{isLoading ? "Loading..." : `Pay $${price}`}*/}
           </Button>
         </CardFooter>
       </Card>
