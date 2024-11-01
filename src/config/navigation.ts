@@ -7,21 +7,25 @@ export const navigationConfig: NavigationConfig = {
     //   href: "/#features",
     // },
     {
-      title: "Men",
-      href: "/men",
+      title: "coffee",
+      href: "/products",
     },
     {
-      title: "Women",
-      href: "/women",
+      title: "learn",
+      href: "/learn",
     },
-    {
-      title: "Unisex",
-      href: "/unisex",
-    },
-    {
-      title: "Home Scents",
-      href: "/home-scents",
-    },
+    // {
+    //   title: "Women",
+    //   href: "/women",
+    // },
+    // {
+    //   title: "Unisex",
+    //   href: "/unisex",
+    // },
+    // {
+    //   title: "Home Scents",
+    //   href: "/home-scents",
+    // },
     {
       title: "Sale",
       href: "/sale",

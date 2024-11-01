@@ -11,100 +11,137 @@ import {
   pgEnum,
   integer,
   serial,
+  uniqueIndex,
+  check,
+  pgPolicy,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 
-//TODO: Change all timestamp to Date type
-const createdAt = timestamp("created_at", {
-  withTimezone: true,
-  mode: "string",
-})
-  .defaultNow()
-  .notNull();
+import {
+  authenticatedRole,
+  authUid,
+  authUsers,
+  realtimeMessages,
+  realtimeTopic,
+  supabaseAuthAdminRole,
+} from "drizzle-orm/supabase";
 
-const updatedAt = timestamp("updated_at", {
-  withTimezone: true,
-  mode: "string",
-})
+const createdAt = timestamp("created_at").defaultNow().notNull();
+
+const updatedAt = timestamp("updated_at")
   .defaultNow()
   .notNull()
-  .$onUpdate(() => new Date().toDateString());
+  .$onUpdate(() => new Date());
 
 export const userTable = pgTable(
   "user",
   {
-    id: uuid("id").unique().defaultRandom().notNull(),
+    id: uuid("id").defaultRandom().notNull().unique(),
     avatar: text("avatar"),
     fullName: text("full_name"),
     username: text("username").notNull(),
     email: text("email").notNull().unique(),
-    //TODO: deprecate phone
-    phone: text("phone"),
-    dateOfBirth: timestamp("date_of_birth", {
-      withTimezone: true,
-      mode: "string",
+    birthDate: timestamp("birth_date"),
+    createdAt,
+    updatedAt,
+  },
+  (table) => [
+    primaryKey({ columns: [table.id, table.email] }),
+    pgPolicy("Users can read their own addresses", {
+      for: "select",
+      to: authenticatedRole,
+      using: sql`true`,
     }),
+  ],
+);
+
+export const subscriptionTable = pgTable("subscription", {
+  email: text("email")
+    .primaryKey()
+    .references(() => userTable.email, {
+      onDelete: "cascade",
+    }),
+  subscriptionId: text("subscription_id"),
+  customerId: text("customer_id"),
+  priceId: text("price_id"),
+  expiresAt: timestamp("expires_at"),
+  createdAt,
+  updatedAt,
+});
+
+export const productTable = pgTable("product", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  slug: text("slug").unique().notNull(),
+  flavorProfile: text("flavor_profile").notNull(),
+  description: text("description"),
+  image: text("image"),
+  inStock: boolean("in_stock").default(true),
+  createdAt,
+  updatedAt,
+});
+
+export const productSKUTable = pgTable("product_sku", {
+  id: serial("id").primaryKey(),
+  productId: serial("product_id").references(() => productTable.id),
+  sku: text("sku").notNull(),
+  price: integer("price").notNull(), // stored in cents
+  sizeAttributeId: serial("size_attribute_id").references(
+    () => productAttributeTable.id,
+  ),
+  grindAttributeId: serial("grind_attribute_id").references(
+    () => productAttributeTable.id,
+  ),
+  createdAt,
+  updatedAt,
+});
+
+export const productAttributeTypeEnum = pgEnum("attribute_type", [
+  "size",
+  "grind",
+]);
+
+export const productAttributeTable = pgTable(
+  "product_attribute",
+  {
+    id: serial("id").primaryKey(),
+    value: text("value").notNull(),
+    type: productAttributeTypeEnum("type").notNull(),
     createdAt,
     updatedAt,
   },
   (table) => {
     return {
-      pk: primaryKey({ columns: [table.id, table.email] }),
+      valueTypeUnique: uniqueIndex("value_type_unique").on(
+        table.value,
+        table.type,
+      ),
+      checkConstraint: check(
+        "check_attribute_value",
+        sql`${table.value} IN ('100', '250', '1000', 'whole-bean', 'ground')`,
+      ),
     };
   },
 );
 
-export const subscriptionTable = pgTable("subscription", {
-  email: text("email")
-    .notNull()
-    .primaryKey()
-    .references(() => userTable.email, {
-      onDelete: "cascade",
-      onUpdate: "cascade",
-    }),
-  subscriptionId: text("subscription_id"),
-  customerId: text("customer_id"),
-  priceId: text("price_id"),
-  expiresAt: timestamp("expires_at", { withTimezone: true, mode: "string" }),
-  createdAt,
-  updatedAt,
-  //TODO: maybe add isActive column and add updatedAt
-});
+// export const addCheckConstraint = sql`
+//   ALTER TABLE product_attribute
+//   ADD CONSTRAINT check_attribute_value_matches_type
+//   CHECK (
+//     (type = 'size' AND value IN ('100', '250', '1000')) OR
+//     (type = 'grind' AND value IN ('whole-bean', 'ground'))
+//   );
+// `;
 
-export const productSizeEnum = pgEnum("size", [
-  "5",
-  "10",
-  "15",
-  "30",
-  "50",
-  "75",
-  "100",
-  "125",
-  "150",
-  "200",
-]);
-//TODO: add favorites, ratings, reviews, comments, etc.
-export const productTable = pgTable("product", {
-  id: serial("id").primaryKey(),
-  name: text("name"),
-  subName: text("sub_name"),
-  description: text("description"),
-  price: text("price"),
-  image: text("image"),
-  size: productSizeEnum("size"),
-  createdAt,
-  updatedAt,
-});
-
+//TODO: change text to varchar with a limit declared in addressFormSchema
 export const addressTable = pgTable("address", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id")
     .references(() => userTable.id, {
       onDelete: "cascade",
-      onUpdate: "cascade",
     })
     .notNull(),
-  title: text("name"),
+  name: text("name"),
   addressLine1: text("address_line_1"),
   addressLine2: text("address_line_2"),
   country: text("country"),
@@ -152,6 +189,7 @@ export const orderStatusEnum = pgEnum("status", [
 //   updatedAt,
 // });
 
+//TODO: Improve order and order_item tables
 export const orderTable = pgTable("order", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id").references(() => userTable.id),
@@ -166,7 +204,16 @@ export const orderTable = pgTable("order", {
 export const orderItemTable = pgTable("order_item", {
   id: serial("id").primaryKey(),
   orderId: uuid("order_id").references(() => orderTable.id),
-  productId: serial("product_id").references(() => productTable.id),
+  productId: serial("product_id")
+    .references(() => productTable.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
+  productSkuId: serial("product_id")
+    .references(() => productSKUTable.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
   quantity: integer("quantity").default(1).notNull(),
   createdAt,
   updatedAt,
@@ -177,10 +224,9 @@ export const cartTable = pgTable("cart", {
   userId: uuid("user_id")
     .references(() => userTable.id, {
       onDelete: "cascade",
-      onUpdate: "cascade",
     })
     .notNull(),
-  totalAmount: real("total_amount").default(0).notNull(),
+  total: real("total").default(0).notNull(),
   createdAt,
   updatedAt,
 });
@@ -190,13 +236,17 @@ export const cartItemTable = pgTable("cart_item", {
   cartId: serial("cart_id")
     .references(() => cartTable.id, {
       onDelete: "cascade",
-      onUpdate: "cascade",
     })
     .notNull(),
   productId: serial("product_id")
     .references(() => productTable.id, {
       onDelete: "cascade",
-      onUpdate: "cascade",
+    })
+    .notNull(),
+  // TODO: push this table again
+  productSkuId: serial("product_sku_id")
+    .references(() => productSKUTable.id, {
+      onDelete: "cascade",
     })
     .notNull(),
   quantity: integer("quantity").default(1).notNull(),
@@ -264,3 +314,30 @@ export const orderItemRelations = relations(orderItemTable, ({ one }) => ({
     references: [productTable.id],
   }),
 }));
+
+export const productRelations = relations(productTable, ({ many }) => ({
+  skus: many(productSKUTable),
+}));
+
+export const productSKURelations = relations(productSKUTable, ({ one }) => ({
+  product: one(productTable, {
+    fields: [productSKUTable.productId],
+    references: [productTable.id],
+  }),
+  sizeAttribute: one(productAttributeTable, {
+    fields: [productSKUTable.sizeAttributeId],
+    references: [productAttributeTable.id],
+  }),
+  grindAttribute: one(productAttributeTable, {
+    fields: [productSKUTable.grindAttributeId],
+    references: [productAttributeTable.id],
+  }),
+}));
+
+//TODO: maybe is not required
+export const productAttributeRelations = relations(
+  productAttributeTable,
+  ({ many }) => ({
+    skus: many(productSKUTable),
+  }),
+);

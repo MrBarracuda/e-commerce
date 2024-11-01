@@ -25,8 +25,8 @@ export function MainNav({ items, children }: MainNavProps) {
         href="/"
         className="hidden cursor-pointer items-center space-x-2 md:flex"
       >
-        <Icons.logo />
-        <span className="hidden font-bold sm:inline-block">
+        {/*<Icons.logo />*/}
+        <span className="hidden font-bold uppercase tracking-wide sm:inline-block">
           {siteConfig.name}
         </span>
       </Link>
@@ -37,7 +37,7 @@ export function MainNav({ items, children }: MainNavProps) {
               key={index}
               href={item.disabled ? "#" : item.href}
               className={cn(
-                "flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm",
+                "text-md flex items-center font-mono font-light uppercase transition-colors hover:text-foreground/80 sm:text-sm",
                 item.href.startsWith(`/${segment}`)
                   ? "text-foreground"
                   : "text-foreground/60",
@@ -53,8 +53,8 @@ export function MainNav({ items, children }: MainNavProps) {
         className="flex items-center space-x-2 md:hidden"
         onClick={() => setShowMobileMenu(!showMobileMenu)}
       >
-        {showMobileMenu ? <Icons.close /> : <Icons.logo />}
-        <span className="font-bold">Menu</span>
+        {showMobileMenu ? <Icons.close /> : <Icons.hamburgerMenu />}
+        {/*<span className="font-bold">Menu</span>*/}
       </button>
       {showMobileMenu && items && (
         <MobileNav items={items}>{children}</MobileNav>

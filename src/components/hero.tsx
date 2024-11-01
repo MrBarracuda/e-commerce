@@ -1,12 +1,13 @@
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
-import { Wrapper } from "@/components/wrapper";
+import Container from "@/components/container";
 
 export function Hero() {
   return (
-    <Wrapper className="bg-[url(/bg-light.svg)] bg-cover bg-repeat py-16 dark:bg-[url(/bg-dark.svg)]">
-      <section className="mx-auto flex max-w-4xl flex-col items-center py-16 text-center">
-        <h1 className="-m-1 text-5xl font-semibold md:text-6xl">
+    // bg-background bg-cover bg-repeat py-16 dark:bg-[url(/bg-dark.svg)]
+    <Container className="bg-background">
+      <div className="mx-auto flex flex-col items-center py-16 text-center">
+        <h1 className="-m-1 text-balance font-serif text-5xl font-semibold tracking-tighter sm:text-6xl">
           Discover premium perfume replicas with unmatched quality
         </h1>
         <p className="mt-6 max-w-prose text-lg text-muted-foreground">
@@ -18,11 +19,11 @@ export function Hero() {
           <Link href="/products" className={buttonVariants()}>
             Browse Bestsellers
           </Link>
-          <button className={buttonVariants({ variant: "ghost" })}>
+          <button className={buttonVariants({ variant: "outline" })}>
             Contact Us &rarr;
           </button>
         </div>
-      </section>
-    </Wrapper>
+      </div>
+    </Container>
   );
 }

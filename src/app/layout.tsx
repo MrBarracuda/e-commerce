@@ -1,4 +1,4 @@
-import "@/styles/globals.css";
+import "../globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
@@ -8,6 +8,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Navbar } from "@/components/navbar";
 import { siteConfig } from "@/config/site";
 import { ScrollObserver } from "@/components/scroll-observer";
+import { TestFooter } from "@/components/footer";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -26,8 +28,7 @@ export default function RootLayout({
     >
       <body
         data-scroll-direction="false"
-        // className="h-screen w-screen overflow-hidden antialiased group:"
-        className="group antialiased"
+        className="group min-h-screen antialiased"
       >
         <QueryProvider>
           <ThemeProvider
@@ -36,10 +37,12 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Navbar />
-            {/*<div className="flex h-full overflow-auto">*/}
-            <div>
-              <main className="flex-grow">{children}</main>
+            <div className="flex w-full flex-col">
+              <NuqsAdapter>
+                <Navbar />
+                <main>{children}</main>
+                <TestFooter />
+              </NuqsAdapter>
             </div>
             <Toaster />
             <ScrollObserver />

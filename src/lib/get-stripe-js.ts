@@ -6,7 +6,7 @@ import { env } from "@/env";
 
 let stripePromise: Promise<Stripe | null> | undefined;
 
-export default function getStripe(): Promise<Stripe | null> {
+export function getStripe(): Promise<Stripe | null> {
   if (!stripePromise) stripePromise = loadStripe(env.NEXT_PUBLIC_STRIPE_PK);
 
   return stripePromise;

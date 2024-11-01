@@ -30,14 +30,6 @@ export function CartSheet() {
           aria-label="cart"
         >
           <Icons.cart />
-          <span
-            className={cn(
-              itemCount === 0 ? "hidden" : "",
-              "absolute top-4 text-xs font-bold",
-            )}
-          >
-            {itemCount}
-          </span>
         </Button>
       </SheetTrigger>
       <SheetContent className="flex w-full flex-col pr-0 sm:max-w-lg">
@@ -46,7 +38,7 @@ export function CartSheet() {
         </SheetHeader>
         {itemCount > 0 ? (
           <>
-            <div className="flex w-full flex-col pr-6">
+            <div className="flex w-full flex-1 flex-col pr-6">
               {/*TODO: Cart logic*/}
               cart items
             </div>

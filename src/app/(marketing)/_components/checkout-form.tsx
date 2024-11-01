@@ -1,0 +1,171 @@
+"use client";
+
+import {
+  AddressElement,
+  Elements,
+  LinkAuthenticationElement,
+  PaymentElement,
+  useElements,
+  useStripe,
+} from "@stripe/react-stripe-js";
+import { type Product } from "@/types";
+import Image from "next/image";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { type FormEvent, useState } from "react";
+import { getStripe } from "@/lib/get-stripe-js";
+import { userOrderExists } from "@/lib/actions/order";
+import { Icons } from "@/components/icons";
+
+type CheckoutFormProps = {
+  product: Product;
+  clientSecret: string;
+  userId: string;
+};
+
+const mockPrice = "999";
+
+export function CheckoutForm({
+  product,
+  clientSecret,
+  userId,
+}: CheckoutFormProps) {
+  return (
+    <div className="mx-auto w-full max-w-5xl space-y-8">
+      <div className="flex items-center gap-4">
+        <div className="relative aspect-video w-1/3 flex-shrink-0">
+          <Image
+            fill
+            src="https://dummyimage.com/400x400"
+            alt={product.image ?? ""}
+            className="object-cover"
+          />
+        </div>
+        <div>
+          <div className="text-xl">${mockPrice}</div>
+          <h2 className="text-2xl font-bold">{product.title}</h2>
+          <div className="line-clamp-3 text-muted-foreground">
+            {product.description}
+          </div>
+        </div>
+      </div>
+      <Elements options={{ clientSecret }} stripe={getStripe()}>
+        <Form
+          price={mockPrice}
+          clientSecret={clientSecret}
+          productId={product.id}
+          userId={userId}
+        />
+      </Elements>
+    </div>
+  );
+}
+
+function Form({
+  price,
+  productId,
+  userId,
+}: {
+  price: string;
+  clientSecret?: string;
+  productId: number;
+  userId: string;
+}) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (stripe === null || elements === null) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    const orderExists = await userOrderExists(userId, productId);
+
+    if (orderExists) {
+      setErrorMessage("You have already placed an order");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: "http://localhost:3000/order",
+          shipping: {
+            address: {
+              city: "San Francisco",
+              country: "US",
+              line1: "123 Main St",
+              postal_code: "94105",
+              state: "CA",
+            },
+            name: "John Doe",
+          },
+          receipt_email: "1dima99999@gmail.com",
+        },
+      });
+
+      if (error.type === "card_error" || error.type === "validation_error") {
+        setErrorMessage(`Error: ${error.message}`);
+      } else {
+        setErrorMessage("An unknown error occurred");
+      }
+    } catch (error) {
+      console.error("Error during payment confirmation:", error);
+      setErrorMessage("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Checkout</CardTitle>
+          {errorMessage && (
+            <CardDescription className="text-destructive">
+              {errorMessage}
+            </CardDescription>
+          )}
+        </CardHeader>
+        <CardContent>
+          <PaymentElement />
+          {/*<LinkAuthenticationElement />*/}
+          {/*<AddressElement options={{ mode: "shipping" }} />*/}
+        </CardContent>
+        <CardFooter>
+          <Button
+            className="w-full"
+            // className="w-full"
+            size="lg"
+            type="submit"
+            disabled={stripe === null || elements === null || isLoading}
+          >
+            {isLoading ? (
+              <Icons.spinner className="mr-2 animate-spin" />
+            ) : (
+              `Pay $${price}`
+            )}
+
+            {/*{isLoading ? "Loading..." : `Pay $${price}`}*/}
+          </Button>
+        </CardFooter>
+      </Card>
+    </form>
+  );
+}
