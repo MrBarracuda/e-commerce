@@ -52,7 +52,6 @@ export function Profile({ avatar, username, isLoggedIn }: ProfileProps) {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/order" aria-label="orders" className="appearance-none">
-            {/*TODO: Allow to navigate to dashboard if user has role of a admin */}
             <Icons.rocket />
             Orders
           </Link>

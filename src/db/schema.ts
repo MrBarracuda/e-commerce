@@ -13,8 +13,18 @@ import {
   serial,
   uniqueIndex,
   check,
+  pgPolicy,
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
+
+import {
+  authenticatedRole,
+  authUid,
+  authUsers,
+  realtimeMessages,
+  realtimeTopic,
+  supabaseAuthAdminRole,
+} from "drizzle-orm/supabase";
 
 const createdAt = timestamp("created_at").defaultNow().notNull();
 
@@ -35,11 +45,14 @@ export const userTable = pgTable(
     createdAt,
     updatedAt,
   },
-  (table) => {
-    return {
-      pk: primaryKey({ columns: [table.id, table.email] }),
-    };
-  },
+  (table) => [
+    primaryKey({ columns: [table.id, table.email] }),
+    pgPolicy("Users can read their own addresses", {
+      for: "select",
+      to: authenticatedRole,
+      using: sql`true`,
+    }),
+  ],
 );
 
 export const subscriptionTable = pgTable("subscription", {

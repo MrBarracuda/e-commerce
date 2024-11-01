@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { Wrapper } from "@/components/wrapper";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import Container from "@/components/container";
 
 export default function SettingsLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <Wrapper className="max-w-screen-xl py-12 md:px-12">
+    <Container className="mx-auto max-w-screen-lg">
       <div className="block md:grid md:grid-cols-4 md:space-x-10">
         <div className="fixed hidden space-y-6 md:block">
           <h2 className="break-all text-3xl font-bold">
@@ -48,6 +48,6 @@ export default function SettingsLayout({
         {/*right side*/}
         {children}
       </div>
-    </Wrapper>
+    </Container>
   );
 }
