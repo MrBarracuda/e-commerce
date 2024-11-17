@@ -8,9 +8,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { type ProductSKU } from "@/types";
+import { type Product, type ProductSKU } from "@/types";
 import { useQueryState } from "nuqs";
 import { useMemo } from "react";
+import { useCartStore } from "@/stores/cart-store";
 
 type Props = {
   id: number;
@@ -30,7 +31,22 @@ export function ProductDetailsForm({ skus }: { skus: Props[] }) {
   const [size, setSize] = useQueryState("size");
   const [grind, setGrind] = useQueryState("grind");
 
-  console.log(skus);
+  const { addItemToCart } = useCartStore((state) => state);
+
+  const onAddToCart = () => {
+    const res = {
+      size: size ?? sizeOptions[0]?.value ?? "100",
+      grind: grind ?? grindOptions[0]?.value ?? "whole-bean",
+      price: selectedSku?.price ?? 999,
+      id: selectedSku?.id ?? 0,
+    };
+
+    console.log(res);
+    addItemToCart(res);
+    // toast.success("Added to cart");
+  };
+
+  // console.log(skus);
 
   const sizeOptions = useMemo(() => {
     const uniqueSizes = Array.from(
@@ -59,18 +75,18 @@ export function ProductDetailsForm({ skus }: { skus: Props[] }) {
       (sku) =>
         sku.sizeAttribute.value === (size ?? sizeOptions[0]?.value) &&
         sku.grindAttribute.value === (grind ?? grindOptions[0]?.value),
-    );
+    )!;
   }, [skus, size, grind, sizeOptions, grindOptions]);
 
-  function addToCart() {
-    const res = {
-      size: size ?? sizeOptions[0]?.value ?? "100",
-      grind: grind ?? grindOptions[0]?.value ?? "whole-bean",
-      price: selectedSku?.price,
-    };
-
-    console.log(res);
-  }
+  // function addToCart() {
+  //   const res = {
+  //     size: size ?? sizeOptions[0]?.value ?? "100",
+  //     grind: grind ?? grindOptions[0]?.value ?? "whole-bean",
+  //     price: selectedSku?.price,
+  //   };
+  //
+  //   console.log(res);
+  // }
 
   return (
     <div className="mb-5 flex flex-col items-start justify-between gap-y-5 pb-5">
@@ -120,7 +136,7 @@ export function ProductDetailsForm({ skus }: { skus: Props[] }) {
         type="submit"
         size="lg"
         className="inline-flex w-full justify-center gap-x-4 font-light uppercase"
-        onClick={addToCart}
+        onClick={onAddToCart}
       >
         <span>Add to cart</span>
         <span>${selectedSku?.price ?? "--"}</span>

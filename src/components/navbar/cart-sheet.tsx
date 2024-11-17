@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn, formatPrice } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
+import { CartItems } from "@/components/navbar/cart-items";
 
 export function CartSheet() {
   const itemCount = 4 as number;
@@ -40,7 +41,7 @@ export function CartSheet() {
           <>
             <div className="flex w-full flex-1 flex-col pr-6">
               {/*TODO: Cart logic*/}
-              cart items
+              <CartItems />
             </div>
             <div className="space-y-4 pr-6">
               <Separator />
